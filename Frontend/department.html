@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/funcionalidades.js"></script>
+    <link rel="stylesheet" href="../estilos css/department.css">
+    <title>Departamento</title>
+</head>
+<body>
+    <header class="header_dp">
+        <h1>Departamento</h1>
+        <div class="back_button">
+            <a href="../index.html"> ⮐ Volver</a>
+        </div>
+    </header>
+    <form class="main_form">
+        <fieldset class="form_content">
+            <label class="information_item" for="consult">Nombre del departamento</label>
+            <br>
+            <br>
+            <input class="text_box" type="text" placeholder="Aquí aparecerá el nombre del depa" id="NomDep" readonly autocomplete="off">
+            <input class="boton_form" type="submit" value="Consultar" id="consult" onclick="mostrar(event)">
+        </fieldset>
+        <fieldset class="form_content">
+            <label class="information_item" for="Modif">Modificar nombre del departamento</label>
+            <br>
+            <br>
+            <input class="text_box modif_textbox" type="text" placeholder="Nuevo nombre del departamento" minlength="4" maxlength="50" id="NewDep" autocomplete="off">
+            <input class="boton_form" type="submit" value="Modificar" id="Modif" onclick="Modify(event)">
+        </fieldset>
+    </form>
+</body>
+</html>
