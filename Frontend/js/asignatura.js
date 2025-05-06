@@ -1,31 +1,107 @@
-function guardarAsignatura(event) {
+// Registrar Asignatura
+function registrarAsignatura(event) {
     event.preventDefault();
-    const datos = {
-        codigo: document.getElementById("codigo").value,
-        nombre: document.getElementById("nombre").value,
-        creditos: document.getElementById("creditos").value
+    
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "nombre": document.getElementById("nombreAsig").value,
+      "codigo": document.getElementById("codigo").value,
+      "creditos": document.getElementById("SemestreAgre").value, // Nota: Hay un error en el HTML, debería ser creditos, no SemestreAgre
+      "grupo": document.getElementById("grupo").value,
+      "semestre": document.getElementById("SemestreAgre").value
+    });
+  
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
     };
-
-    fetch("https://ejemplodedsws.netlify.app/.netlify/functions/asignaturas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-    })
-    .then(res => res.text())
-    .then(res => console.log(res))
-    .catch(err => console.error(err));
-}
-
-function listarAsignaturas(event) {
+  
+    fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Asignatura registrada exitosamente");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al registrar asignatura");
+      });
+  }
+  
+  // Consultar Asignatura
+  function consultarAsignatura(event) {
     event.preventDefault();
-    fetch("https://ejemplodedsws.netlify.app/.netlify/functions/asignaturas")
-        .then(res => res.json())
-        .then(data => {
-            let salida = "";
-            data.forEach(asig => {
-                salida += `<p>Código: ${asig.codigo}<br>Nombre: ${asig.nombre}<br>Créditos: ${asig.creditos}</p><br>`;
-            });
-            document.getElementById("rta").innerHTML = salida;
-        })
-        .catch(err => console.error(err));
-}
+    
+    const codigo = document.getElementById("tipoCodConsulta").value;
+    const semestre = document.getElementById("SemestreConsulta").value;
+    const grupo = document.getElementById("secConsulta").value;
+  
+    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}`)
+      .then((response) => response.json())
+      .then((result) => {
+        document.getElementById("NomAsig").value = result.nombre || "No encontrada";
+        // Nota: Hay dos campos con id="NomAsig" en tu HTML, deberías corregir esto
+      })
+      .catch((error) => {
+        console.error(error);
+        document.getElementById("NomAsig").value = "Error al consultar";
+      });
+  }
+  
+  // Buscar Asignatura para Modificar
+  function buscarAsignatura(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("tipoCodConsulta").value;
+    const semestre = document.getElementById("SemestreConsulta").value;
+    const grupo = document.getElementById("secConsulta").value;
+  
+    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}`)
+      .then((response) => response.json())
+      .then((result) => {
+        document.getElementById("nuevoNombre").value = result.nombre || "";
+        document.getElementById("nuevosCreditos").value = result.creditos || "";
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al buscar asignatura");
+      });
+  }
+  
+  // Modificar Asignatura
+  function modificarAsignatura(event) {
+    event.preventDefault();
+    
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "codigo": document.getElementById("tipoCodConsulta").value,
+      "semestre": document.getElementById("SemestreConsulta").value,
+      "grupo": document.getElementById("secConsulta").value,
+      "nuevoNombre": document.getElementById("nuevoNombre").value,
+      "nuevosCreditos": document.getElementById("nuevosCreditos").value
+    });
+  
+    let requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+  
+    fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Asignatura modificada exitosamente");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al modificar asignatura");
+      });
+  }

@@ -1,32 +1,161 @@
-function guardarAsistencia(event) {
+// Crear Lista de Asistencias
+function crearlista(event) {
     event.preventDefault();
-    const datos = {
-        estudiante: document.getElementById("estudiante").value,
-        asignatura: document.getElementById("asignatura").value,
-        fecha: document.getElementById("fecha").value,
-        presente: document.getElementById("presente").checked
+    
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "semestre": document.getElementById("semestrecrear").value,
+      "grupo": document.getElementById("grupocrear").value,
+      "codigo": document.getElementById("codigocrear").value,
+      "fecha": document.getElementById("fechacrear").value,
+      "horaInicio": document.getElementById("horainicrear").value
+    });
+  
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
     };
-
-    fetch("https://ejemplodedsws.netlify.app/.netlify/functions/asistencias", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-    })
-    .then(res => res.text())
-    .then(res => console.log(res))
-    .catch(err => console.error(err));
-}
-
-function listarAsistencias(event) {
+  
+    fetch("https://tu-sitio.netlify.app/.netlify/functions/asistencias", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Lista de asistencia creada exitosamente");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al crear lista de asistencia");
+      });
+  }
+  
+  // Buscar Lista para Llenar
+  function buscarlista(event) {
     event.preventDefault();
-    fetch("https://ejemplodedsws.netlify.app/.netlify/functions/asistencias")
-        .then(res => res.json())
-        .then(data => {
-            let salida = "";
-            data.forEach(asist => {
-                salida += `<p>Estudiante: ${asist.estudiante}<br>Asignatura: ${asist.asignatura}<br>Fecha: ${asist.fecha}<br>Presente: ${asist.presente ? 'Sí' : 'No'}</p><br>`;
-            });
-            document.getElementById("rta").innerHTML = salida;
-        })
-        .catch(err => console.error(err));
-}
+    
+    const codigo = document.getElementById("codigollenar").value;
+    const fecha = document.getElementById("fechallenar").value;
+    const horaInicio = document.getElementById("horainillenar").value;
+  
+    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asistencias?codigo=${codigo}&fecha=${fecha}&horaInicio=${horaInicio}`)
+      .then((response) => response.json())
+      .then((result) => {
+        const tabla = document.querySelector("#tablaAsisLlenar tbody");
+        tabla.innerHTML = "";
+        
+        result.estudiantes.forEach(est => {
+          const row = document.createElement("tr");
+          
+          const tdTipoDoc = document.createElement("td");
+          tdTipoDoc.textContent = est.tipoDocumento;
+          
+          const tdNumDoc = document.createElement("td");
+          tdNumDoc.textContent = est.numeroDocumento;
+          
+          const tdEstado = document.createElement("td");
+          const select = document.createElement("select");
+          select.innerHTML = `
+            <option value="Asistió" ${est.estado === 'Asistió' ? 'selected' : ''}>Asistió</option>
+            <option value="Falta" ${est.estado === 'Falta' ? 'selected' : ''}>Falta</option>
+            <option value="Justificada" ${est.estado === 'Justificada' ? 'selected' : ''}>Justificada</option>
+          `;
+          tdEstado.appendChild(select);
+          
+          row.appendChild(tdTipoDoc);
+          row.appendChild(tdNumDoc);
+          row.appendChild(tdEstado);
+          tabla.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al buscar lista de asistencia");
+      });
+  }
+  
+  // Llenar Lista de Asistencia
+  function lleanarlista(event) {
+    event.preventDefault();
+    
+    const rows = document.querySelectorAll("#tablaAsisLlenar tbody tr");
+    const estudiantes = [];
+    
+    rows.forEach(row => {
+      estudiantes.push({
+        tipoDocumento: row.cells[0].textContent,
+        numeroDocumento: row.cells[1].textContent,
+        estado: row.cells[2].querySelector("select").value
+      });
+    });
+  
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "codigo": document.getElementById("codigollenar").value,
+      "fecha": document.getElementById("fechallenar").value,
+      "horaInicio": document.getElementById("horainillenar").value,
+      "estudiantes": estudiantes
+    });
+  
+    let requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+  
+    fetch("https://tu-sitio.netlify.app/.netlify/functions/asistencias", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Asistencia registrada exitosamente");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al registrar asistencia");
+      });
+  }
+  
+  // Consultar Asistencia
+  function consultarAsistencia(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("codigocon").value;
+    const semestre = document.getElementById("semestrecon").value;
+    const grupo = document.getElementById("grupocon").value;
+    const fecha = document.getElementById("fechacon").value;
+    const horaInicio = document.getElementById("horainicon").value;
+  
+    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asistencias?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}&fecha=${fecha}&horaInicio=${horaInicio}`)
+      .then((response) => response.json())
+      .then((result) => {
+        const tabla = document.querySelector("#tablaAsisCon tbody");
+        tabla.innerHTML = "";
+        
+        result.estudiantes.forEach(est => {
+          const row = document.createElement("tr");
+          
+          const tdTipoDoc = document.createElement("td");
+          tdTipoDoc.textContent = est.tipoDocumento;
+          
+          const tdNumDoc = document.createElement("td");
+          tdNumDoc.textContent = est.numeroDocumento;
+          
+          const tdEstado = document.createElement("td");
+          tdEstado.textContent = est.estado;
+          
+          row.appendChild(tdTipoDoc);
+          row.appendChild(tdNumDoc);
+          row.appendChild(tdEstado);
+          tabla.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al consultar asistencia");
+      });
+  }

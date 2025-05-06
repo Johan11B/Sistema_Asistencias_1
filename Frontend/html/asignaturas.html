@@ -18,21 +18,21 @@
         <fieldset class="camp_form">
             <h2>Agregar Asignatura</h2>
             <label class="camp_info" for="nombreAsig">Nombre de la asignatura: </label>
-            <input type="text" class="text_camp" id="nombreAsig" placeholder="Nombre completo" required autocomplete="off">
+            <input type="text" class="text_camp" id="nombreAsig" placeholder="Nombre completo" required>
             <br><br>
-            <label class="camp_info" for="codigo">Codigo de la asignatura: </label>
-            <input type="text" class="text_camp" id="codigo" placeholder="12345" required autocomplete="off">
+            <label class="camp_info" for="codigo">Código de la asignatura: </label>
+            <input type="text" class="text_camp" id="codigo" placeholder="12345" required>
             <br><br>
-            <label class="camp_info" for="creditos">Creditos de la asignatura: </label>
-            <input type="number"  id="SemestreAgre" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <label class="camp_info" for="creditos">Créditos de la asignatura: </label>
+            <input type="number" id="creditos" min="1" max="99" required>
             <br><br>
-            <label class="camp_info" for="grupo">Grupo de la asignatura: </label>
-            <input type="text" class="text_camp" id="grupo" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <label class="camp_info" for="grupo">Grupo: </label>
+            <input type="text" class="text_camp" id="grupo" placeholder="Ej: 401M" required>
             <br><br>
-            <label class="camp_info" for="semestre">Semestre de la asignatura: </label>
-            <input type="number" class="text_camp" id="SemestreAgre" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <label class="camp_info" for="semestre">Semestre: </label>
+            <input type="number" id="semestre" min="1" max="99" required>
             <br><br>
-            <input type="submit" class="submit_camp" value="Registrar" id="registrarAsig" onclick="registrarAsignatura(event)">
+            <button type="button" class="submit_camp" id="registrarAsig">Registrar</button>
         </fieldset>
     </form>
     <form class="form_asg">  

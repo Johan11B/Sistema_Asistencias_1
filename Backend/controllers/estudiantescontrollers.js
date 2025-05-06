@@ -1,32 +1,33 @@
-class EstudiantesController{
-    construct(){
+exports.consultar = async (req, res) => {
+    try {
+        // Lógica para consultar estudiante
+        // Usando req.query para los parámetros (?tipoDoc=X&numDoc=Y)
+        const { tipoDoc, numDoc } = req.query;
+        // ... lógica de consulta ...
+        res.json({ nombre: "Nombre del estudiante" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-    consultar(req,res){
-        try{
-            let arreglo=[];
-            let myObj = {Nombre: "Daniel Esteban", Tipo_Documento: "CC", Codigo: "1077112696"};
-            let myObj2 = {Nombre: "Pedro Gónzales", Tipo_Documento: "CC", Codigo: "1037112636"};
+};
 
-            arreglo.push (myObj);
-            arreglo.push (myObj2);
-
-            let myJSON = JSON.stringify(arreglo);
-
-            res.status(200).send (myJSON);
-        }catch (err){
-            res.status(500).send(err.message);
-        }
+exports.ingresar = async (req, res) => {
+    try {
+        // Lógica para crear nuevo estudiante
+        const { nombre, tipoDocumento, numeroDocumento } = req.body;
+        // ... lógica de creación ...
+        res.status(201).send("Estudiante registrado exitosamente");
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-    ingresar(req,res){
-        try{
-            const {Nombre, Tipo_Dococumento, Codigo} = req.body;
-            console.log ("Documento de identidad: " + Codigo);
-            console.log ("Nombre: "+Nombre);
-            console.log ("Tipo de Documento: "+ Tipo_Dococumento);
-            res.status(200).send ("Funciono ok");
-        }catch (err){
-            res.status(500).send(err.message);
-        }
+};
+
+exports.modificar = async (req, res) => {
+    try {
+        // Lógica para modificar estudiante
+        const { tipoDocumento, numeroDocumento, nuevoNombre, nuevoTipoDoc } = req.body;
+        // ... lógica de modificación ...
+        res.send("Estudiante modificado exitosamente");
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-}
-module.exports = new EstudiantesController();
+};
