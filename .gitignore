@@ -1,0 +1,7 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos del proyecto
+package.json
+package-lock.json
+npm

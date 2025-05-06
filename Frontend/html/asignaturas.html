@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../estilos css/asignaturas.css">
+    <link rel="icon" href="../imágenes/escudo-color.png" type="png">
+    <title>Asignaturas</title>
+</head>
+<body>
+    <header class="header_asg">
+        <h1>Asignaturas</h1>
+        <div class="back_button">
+            <a href="../../index.html"> ⮐ Volver</a>
+        </div>
+    </header>
+    <form class="form_asg">
+        <fieldset class="camp_form">
+            <h2>Agregar Asignatura</h2>
+            <label class="camp_info" for="nombreAsig">Nombre de la asignatura: </label>
+            <input type="text" class="text_camp" id="nombreAsig" placeholder="Nombre completo" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="codigo">Codigo de la asignatura: </label>
+            <input type="text" class="text_camp" id="codigo" placeholder="12345" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="creditos">Creditos de la asignatura: </label>
+            <input type="number"  id="SemestreAgre" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <label class="camp_info" for="grupo">Grupo de la asignatura: </label>
+            <input type="text" class="text_camp" id="grupo" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="semestre">Semestre de la asignatura: </label>
+            <input type="number" class="text_camp" id="SemestreAgre" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <input type="submit" class="submit_camp" value="Registrar" id="registrarAsig" onclick="registrarAsignatura(event)">
+        </fieldset>
+    </form>
+    <form class="form_asg">  
+        <fieldset class="camp_form">
+            <h2>Consultar Asignatura</h2>
+            <label class="camp_info" for="codConsulta">Codigo de la Asignatura</label><br><br>
+            <input type="text" class="text_camp" id="tipoCodConsulta" placeholder="12345" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="semConsulta">Semestre de la asignatura</label><br><br>
+            <input type="number" id="SemestreConsulta" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <label class="camp_info" for="secConsulta">Grupo de la asignatura</label><br><br>
+            <input type="text" class="text_camp" id="secConsulta" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br><br>
+            <input type="submit" class="submit_camp" value="Consultar" id="consultarAsig" onclick="consultarAsignatura(event)">
+            <br><br>
+            <input type="text" class="text_camp" placeholder="Aquí aparecerá el nombre de la asignaura" id="NomAsig" readonly autocomplete="off">
+            <br><br>
+            <input type="text" class="text_camp" placeholder="Aquí aparecerá los creditos de la asignaura" id="NomAsig" readonly autocomplete="off">
+        </fieldset>
+    </form>  
+    <form class="form_asg">  
+        <fieldset class="camp_form">
+            <h2>Modificar Asignatura</h2>
+            <label class="camp_info" for="codConsulta">Codigo de la Asignatura</label><br><br>
+            <input type="text" class="text_camp" id="tipoCodConsulta" placeholder="12345" required autocomplete="off">
+            <br>
+            <label class="camp_info" for="semConsulta">Semestre</label><br><br>
+            <input type="number" id="SemestreConsulta" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br>
+            <label class="camp_info" for="secConsulta">Grupo</label><br><br>
+            <input type="text" class="text_camp" id="secConsulta" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br>
+            <input type="submit" class="submit_camp" value="Buscar" id="buscarAsig" onclick="buscarAsignatura(event)">
+            <br>
+            <br>
+            <label class="camp_info" for="nuevoNombre">Nuevo nombre</label><br><br>
+            <input type="text" class="text_camp" id="nuevoNombre" placeholder="Nuevo nombre" required autocomplete="off">
+            <br>
+            <label class="camp_info" for="nuevosCreditos">Cantidad de creditos</label><br><br>
+            <input type="number" id="nuevosCreditos" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br>
+            <input type="submit" class="submit_camp" value="Modificar" id="modificarAsig" onclick="modificarAsignatura(event)">
+        </fieldset>
+    </form>
+</body>
+</html>

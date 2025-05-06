@@ -3,35 +3,44 @@ body {
     font-family: 'Times New Roman', Times, serif;
     background-color: #48e8; 
 }
-header{
+.header_asist{
     display: flex;
-    justify-content: center;
     position: relative;
     margin-bottom: 10px;
+    background-color: #011b;
+    color: white;
+    justify-content: center;
+}
+.back_button{
+    max-width: 20%;
+    justify-self: right;
+    border: 3px solid white;
+    border-radius: 10px;
+    padding: 8px;
+    position: absolute;
+    top: 32%;
+    right: 8%;
+    opacity: 0.8;
+    transform: scale(0.93);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+.back_button a{
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+}
+.back_button:hover{
+    opacity: 1;
+    transform: scale(1);
+    background-color: #077b;
 }
 h1{
     text-align: center;
     font-size: 5vw;
 }
-.volver{
-    max-width: 20%;
-    justify-self: right;
-    margin: 15px;
-    margin-right: 20px;
-    border: 4px solid black;
-    border-radius: 10px;
-    padding: 6px;
-    position: absolute;
-    top: 40px;
-    right: 40px;
-}
-div a{
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 20px;
-    color: black;
-}
-form {
+.form_asist{
     text-align: center;
     margin: auto;
     border: 2px solid black;
@@ -41,16 +50,16 @@ form {
     padding: 15px;
     box-shadow: 0px 0px 10px 1px #011b;
 }
-label {
+.camp_info {
     font-size: 20px;
     font-weight: bold;
 }
-fieldset {
+.form_camp{
     margin: 15px;
     padding: 20px;
     border: 2px solid black;
 }
-input[type="text"] {
+.camp_text{
     width: 250px;
     font-size: 16px;
     border-radius: 4px;
@@ -58,7 +67,11 @@ input[type="text"] {
     padding-left: 12px;
     margin-bottom: 10px;
 }
-input[type="submit"], button[type="submit"] {
+input:hover, input:focus{
+    outline: none;
+    transform: scale(1.019);
+}
+.submit_button, button[type="submit"] {
     border: 1px solid black;
     border-radius: 3px;
     font-size: 14px;
@@ -67,23 +80,35 @@ input[type="submit"], button[type="submit"] {
     padding: 5px 15px;
     margin-top: 10px;
     cursor: pointer;
+    opacity: 0.87;
+}
+.submit_button:hover{
+    transform: scale(1.019);
+    opacity: 1;
 }
 h2{
     text-align: center;
     font-size: 40px;
 }
-table{
+.table_form{
     border: 1px solid black;
     width:100%; 
     text-align:center;
 }
-th{
+.tittle_head{
     border: 1px solid black;
 }
-select{
+.select_camp{
     font-family: 'Times New Roman', Times, serif;
     font-size: 15px;
     width: 150px;
     border: 2px solid black;
     border-radius: 8px;
+    opacity: 0.87;
+    transform: scale(0.97);
+}
+.select_camp:hover, .select_camp:focus{
+    outline: none;
+    opacity: 1;
+    transform: scale(1.017);
 }

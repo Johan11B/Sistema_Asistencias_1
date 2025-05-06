@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/estudiantes.js"></script>
+    <link rel="stylesheet" href="../estilos css/estudiantes.css">
+    <link rel="icon" href="../imágenes/escudo-color.png" type="png">
+    <title>Estudiantes</title>
+</head>
+<body>
+    <header class="header_st">
+        <h1>Estudiantes</h1>
+        <div class="back_button">
+            <a href="../../index.html"> ⮐ Volver</a>
+        </div>
+    </header>
+    <form class="form_st">
+        <fieldset class="camp_form">
+            <h2 class="camp_tittle">Registrar Estudiante en el Departamento</h2>
+            <label class="camp_info" for="nombreEst">Nombre del estudiante</label><br><br>
+            <input type="text" class="text_camp" id="nombreEst" placeholder="Nombre completo" required autocomplete="off" minlength="10" maxlength="100">
+            <br><br>
+            <label class="camp_info" for="tipoDocEst">Tipo de documento</label><br><br>
+            <select class="select_camp" id="tipoDocEst">
+                <option>TI</option>
+                <option>CC</option>
+            </select>
+            <br><br>
+            <label class="camp_info" for="numDocEst">Número de documento</label><br><br>
+            <input type="text" class="text_camp" id="numDocEst" pattern="\d{10}" placeholder="Ej: 12345678" minlength="8" maxlength="11" autocomplete="off" required>
+            <br><br>
+            <input type="submit" class="submit_button" value="Registrar" id="registrarEst" onclick="registrarEstudiante(event)">
+        </fieldset>
+    </form>
+    <form class="form_st">
+        <fieldset class="camp_form">
+            <h2 class="camp_tittle">Consultar Estudiante en el Departamento</h2>
+            <label class="camp_info" for="tipoDocConsulta">Tipo de documento</label><br><br>
+            <select class="select_camp">
+                <option>TI</option>
+                <option>CC</option>
+            </select>
+            <br><br>
+            <label class="camp_info" for="numDocConsulta">Número de documento</label><br><br>
+            <input type="text" class="text_camp" id="numDocConsulta" pattern="\d{10}" placeholder="Ej: 12345678" minlength="8" maxlength="11" autocomplete="off" required>
+            <br><br>
+            <input type="submit" class="submit_button" value="Consultar" id="consultarEst" onclick="consultarEstudiante(event)">
+            <br><br>
+            <input type="text" class="text_camp" placeholder="Aquí aparecerá el nombre del estudiante" id="NomEst" readonly autocomplete="off">
+        </fieldset>
+    </form>
+    <form class="form_st">
+        <fieldset class="camp_form">
+            <h2 class="camp_tittle">Modificar Estudiante en el Departamento</h2>
+            <label class="camp_info" for="tipoDocMod">Tipo de documento</label><br><br>
+            <select class="select_camp" id="tipoDocMod">
+                <option>TI</option>
+                <option>CC</option>
+            </select>
+            <br><br>
+            <label class="camp_info" for="numDocMod">Número de documento</label><br><br>
+            <input type="text" class="text_camp" id="numDocMod" pattern="\d{10}" placeholder="Ej: 12345678" minlength="8" maxlength="11" autocomplete="off" required>
+            <br><br>
+            <input type="submit" class="submit_button" value="Buscar" id="buscarEst" onclick="buscarEstudiante(event)">
+            <br><br>
+            <label class="camp_info" for="nuevoNombre">Nuevo nombre</label><br><br>
+            <input type="text" class="text_camp" id="NuevoNombre" placeholder="Nombre completo" required autocomplete="off" minlength="10" maxlength="100">
+            <br>
+            <label class="camp_info" for="nuevoTipoDoc">Nuevo tipo de documento</label><br><br>
+            <select class="select_camp" id="nuevoTipoDoc">
+                <option>TI</option>
+                <option>CC</option>
+            </select>
+            <br>
+            <input type="submit" class="submit_button" value="Modificar" id="modificarEst" onclick="modificarEstudiante(event)">
+        </fieldset>
+    </form>
+    <form class="form_st">
+        <fieldset class="camp_form">
+            <h2 class="camp_tittle">Registrar Estudiante en Asignatura </h2>
+            <label class="camp_info" for="CodigoAsign">Código de la Asignatura</label>
+            <input type="text" class="text_camp" id="CodigoAsign" pattern="\d{12}" placeholder="Ej: 554433" minlength="6" maxlength="12" autocomplete="off" required>
+            <br><br>
+            <label class="camp_info" for="GrupoAsign">Grupo de la Asignatura</label>
+            <input type="text" class="text_camp" id="CodigoAsign" pattern="\d{6}" placeholder="Ej: 401M" minlength="3" maxlength="6" autocomplete="off" required>
+            <br><br>
+            <label class="camp_info" for="SemestreAsign">Semestre de la Asignatura</label>
+            <input type="number" id="SemestreAsign" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <input type="submit" class="submit_button" value="Consultar" id="consultAsign">
+            <input type="text" class="text_camp" readonly id="NombreAsign" placeholder="Aquí aparecerá el nombre de la asignatura">
+        </fieldset>
+        <fieldset class="camp_form">
+            <h2 class="camp_tittle">Información del Estudiante</h2>
+            <label class="camp_info" for="CodEst">Código del estudiante: </label>
+            <input type="text" class="text_camp" id="CodEst" pattern="\d{10}" placeholder="Ej: 1078892322" minlength="8" maxlength="11" autocomplete="off" required>
+            <br><br>
+            <label class="camp_info" for="TipoDoc">Tipo de documento del estudiante: </label>
+            <select class="select_camp" id="TipoDoc">
+                <option>TI</option>
+                <option>CC</option>
+            </select>
+            <br><br>
+            <input class="submit_button" type="submit" value="Agregar Estudiante" id="AddEstudiante">
+        </fieldset>
+    </form>
+    <!--
+    <form>
+        <fieldset>
+            <h2>Consultar Estudiante de una Asignatura</h2>
+            <label for="CodigoAsignCons">Código de la Asignatura</label>
+            <input type="text" id="CodigoAsignCons" pattern="\d{12}" placeholder="Ej: 554433" minlength="6" maxlength="12" autocomplete="off" required>
+            <br><br>
+            <label for="GrupoAsignCons">Grupo de la Asignatura</label>
+            <input type="text" id="CodigoAsignCons" pattern="\d{6}" placeholder="Ej: 401M" minlength="3" maxlength="6" autocomplete="off" required>
+            <br><br>
+            <label for="SemestreAsignCons">Semestre de la Asignatura</label>
+            <input type="number" id="SemestreAsignCons" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <input type="submit" value="Consultar" id="consultAsign">
+            <input type="text" readonly id="NombreAsign" placeholder="Aquí aparecerá el nombre de la asignatura">
+        </fieldset>
+        <fieldset>
+        </fieldset>
+    </form>
+-->
+</body>
+</html>

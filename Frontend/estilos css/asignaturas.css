@@ -3,35 +3,44 @@ body {
     font-family: 'Times New Roman', Times, serif;
     background-color: #48e8; 
 }
-header{
+.header_asg{
     display: flex;
-    justify-content: center;
     position: relative;
     margin-bottom: 10px;
+    background-color: #011b;
+    color: white;
+    justify-content: center;
 }
 h1{
     text-align: center;
     font-size: 5vw;
 }
-div{
+.back_button{
     max-width: 20%;
     justify-self: right;
-    margin: 15px;
-    margin-right: 20px;
-    border: 4px solid black;
+    border: 3px solid white;
     border-radius: 10px;
-    padding: 6px;
+    padding: 8px;
     position: absolute;
-    top: 40px;
-    right: 40px;
+    top: 32%;
+    right: 8%;
+    opacity: 0.8;
+    transform: scale(0.93);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
-div a{
+.back_button a{
+    text-decoration: none;
     font-family: inherit;
     font-weight: bold;
     font-size: 20px;
-    color: black;
+    color: white;
 }
-form {
+.back_button:hover{
+    opacity: 1;
+    transform: scale(1);
+    background-color: #077b;
+}
+.form_asg{
     text-align: center;
     margin: auto;
     border: 2px solid black;
@@ -41,16 +50,16 @@ form {
     padding: 15px;
     box-shadow: 0px 0px 10px 1px #011b;
 }
-label {
+.camp_info{
     font-size: 20px;
     font-weight: bold;
 }
-fieldset {
+.camp_form{
     margin: 15px;
     padding: 20px;
     border: 2px solid black;
 }
-input[type="text"] {
+.text_camp{
     width: 250px;
     font-size: 16px;
     border-radius: 4px;
@@ -58,7 +67,7 @@ input[type="text"] {
     padding-left: 12px;
     margin-bottom: 10px;
 }
-input[type="submit"], button[type="submit"] {
+.submit_camp, button[type="submit"] {
     border: 1px solid black;
     border-radius: 3px;
     font-size: 14px;
@@ -67,6 +76,15 @@ input[type="submit"], button[type="submit"] {
     padding: 5px 15px;
     margin-top: 10px;
     cursor: pointer;
+    opacity: 0.87;
+}
+input:hover, input:focus{
+    outline: none;
+    transform: scale(1.017);
+}
+.submit_camp:hover{
+    transform: scale(1.019);
+    opacity: 1;
 }
 h2{
     text-align: center;

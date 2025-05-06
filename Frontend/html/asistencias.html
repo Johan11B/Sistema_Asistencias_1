@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../estilos css/asistencias.css">
+    <link rel="icon" href="../imágenes/escudo-color.png" type="png">
+    <title>Asistencias</title>
+</head>
+<body>
+    <header class="header_asist">
+        <h1>Asistencias</h1>
+        <div class="back_button">
+            <a href="../../index.html"> ⮐ Volver</a>
+        </div>
+    </header>
+    <form class="form_asist">
+        <fieldset class="form_camp">
+            <h2>Crear lista de asistencias</h2>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Información de la asignatura</h2>
+            <label class="camp_info" for="semestre">Semestre de la asignatura: </label>
+            <input type="number" id="semestrecrear" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <label class="camp_info" for="grupo">Grupo de la asignatura:</label>
+            <input type="text" class="camp_text" id="grupocrear" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="codigo">Codigo de la asignatura:</label>
+            <input type="text" class="camp_text" id="codigocrear" placeholder="12345" required autocomplete="off">
+            <br><br> 
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Datos de la lista</h2>
+            <label class="camp_info" for="fecha">Fecha: </label>
+            <input type="date" id="fechacrear" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="Horadeinicio">Hora de Inicio: </label>
+            <input type="time" id="horainicrear" required autocomplete="off">
+            <br><br>
+            <input type="submit" class="submit_button" value="Crear" id="crearLista" onclick="crearlista(event)"> 
+        </fieldset>
+    </form>
+    <form class="form_asist">
+        <fieldset class="form_camp">
+            <h2>Llenar Asistencia</h2>
+            <label class="camp_info" for="codigo">Codigo de la asignatura: </label>
+            <input type="text" class="camp_text" id="codigollenar" placeholder="12345" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="fecha">Fecha: </label>
+            <input type="date" id="fechallenar" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="Horadeinicio">Hora de Inicio: </label>
+            <input type="time" id="horainillenar" required autocomplete="off">
+            <br><br>
+            <input type="submit" class="submit_button" value="Buscar" id="buscarlista" onclick="buscarlista(event)">
+            <br><br>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Lista de asistencia</h2>
+            <div id="contenedor-lista">
+                <table id="tablaAsisLlenar" class="table_form">
+                    <thead>
+                        <tr>
+                            <th class="tittle_head">Tipo de Documento</th>
+                            <th class="tittle_head">Número de Documento</th>
+                            <th class="tittle_head">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <input type="submit" class="submit_button" value="Llenar" id="llenarlista" onclick="lleanarlista(event)">
+            <br><br>
+        </fieldset>
+    </form>
+    <form class="form_asist">
+        <fieldset class="form_camp">
+            <h2>Modificar Asistencia</h2>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Información de la asignatura</h2>
+            <label class="camp_info" for="codigo">Codigo de la asignatura: </label>
+            <input type="text" class="camp_text" id="codigomod" placeholder="12345" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="semestre">Semestre de la asignatura: </label>
+            <input type="number" id="Semestremod" min="1" max="99" required oninput="this.value = this.value.slice(0, 2)">
+            <br><br>
+            <label class="camp_info" for="grupo">Grupo de la asignatura: </label>
+            <input type="text" class="camp_text" id="grupomod" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="fecha">Fecha: </label>
+            <input type="date" id="fechamod" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="Horadeinicio">Hora de Inicio: </label>
+            <input type="time" id="horainimod" required autocomplete="off">
+            <br><br>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Información del estudiante</h2>
+            <label class="camp_info" for="tipoDocEst">Tipo de documento</label><br><br>
+            <select class="select_camp">
+                <option>CC</option>
+                <option>TI</option>
+            </select>
+            <br><br>
+            <label class="camp_info" for="numDocEst">Número de documento</label><br><br>
+            <input type="text" id="numDocMod" placeholder="Ej: 12345678" required autocomplete="off">
+            <br><br>
+            <input type="submit" class="submit_button" value="Buscar" id="buscarlista" onclick="buscarlista(event)">
+            <br><br>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Asistencia a modificar</h2>
+            <div id="lista_modificar">
+                <table id="tablaAsisMod" class="table_form">
+                    <thead>
+                        <tr>
+                            <th class="tittle_head">Tipo de Documento</th>
+                            <th class="tittle_head">Número de Documento</th>
+                            <th class="tittle_head">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <input type="submit" class="submit_button" value="Modificar" id="modificarAsistencia" onclick="modificarAsistencia(event)">
+            <br><br>
+        </fieldset>
+    </form>
+    <form class="form_asist">
+        <fieldset class="form_camp">
+            <h2>Consultar Asistencia</h2>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Información de la asignatura</h2>
+            <label class="camp_info" for="codigo">Codigo de la asignatura: </label><br><br>
+            <input type="text" class="camp_text" id="codigocon" placeholder="12345" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="semestre">Semestre de la asignatura: </label><br><br>
+            <input type="text" class="camp_text" id="semestrecon" placeholder="Ej: 2024-1 2024-2" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="grupo">Grupo de la asignatura: </label><br><br>
+            <input type="text" class="camp_text" id="grupocon" placeholder="Ej: 401M o 402M" required autocomplete="off">
+            <br><br>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Datos de la lista</h2>
+            <label class="camp_info" for="Horadeinicio">Hora de Inicio: </label><br><br>
+            <input type="time" id="horainicon" required autocomplete="off">
+            <br><br>
+            <label class="camp_info" for="fecha">Fecha: </label><br><br>
+            <input type="date" id="fechacon" required autocomplete="off">
+            <br><br>
+            <input type="submit" class="submit_button" value="Consultar" id="consultarAsistencia" onclick="consultarAsistencia(event)">
+            <br><br>
+        </fieldset>
+        <fieldset class="form_camp">
+            <h2>Lista de asistencia</h2>
+            <div id="lista_consultar">
+                <table id="tablaAsisCon" class="table_form">
+                    <thead>
+                        <tr>
+                            <th class="tittle_head">Tipo de Documento</th>
+                            <th class="tittle_head">Número de Documento</th>
+                            <th class="tittle_head">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </form>
+</body>
+</html>
