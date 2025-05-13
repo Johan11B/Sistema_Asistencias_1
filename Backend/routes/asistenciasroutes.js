@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const estudiantescontroller = require("../controllers/estudiantescontrollers")
+const asistenciasController = require("../controllers/asistenciasController");
 
-router.get("/",estudiantescontroller.consultar)
-router.post("/",estudiantescontroller.ingresar)
-
+router.get("/", asistenciasController.consultar);
+router.post("/", asistenciasController.crear);
+router.put("/", asistenciasController.actualizar);
+router.patch("/", asistenciasController.modificar);
 
 module.exports = router;
