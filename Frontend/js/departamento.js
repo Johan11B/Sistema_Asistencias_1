@@ -36,7 +36,7 @@ function mostrar(event) {
       .then((result) => {
         console.log(result);
         alert("Departamento modificado exitosamente");
-        mostrar(event); // Actualizar el nombre mostrado
+        mostrar(event); 
       })
       .catch((error) => {
         console.error(error);

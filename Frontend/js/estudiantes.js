@@ -98,3 +98,51 @@ function registrarEstudiante(event) {
         alert("Error al modificar estudiante");
       });
   }
+  // Consultar Asignatura (nueva función)
+function consultarAsignatura(event) {
+  event.preventDefault();
+  
+  const codigo = document.getElementById("CodigoAsign").value;
+  const grupo = document.getElementById("GrupoAsign").value;
+  const semestre = document.getElementById("SemestreAsign").value;
+
+  fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&grupo=${grupo}&semestre=${semestre}`)
+      .then(response => response.json())
+      .then(data => {
+          document.getElementById("NombreAsign").value = data.nombre || "No encontrada";
+      })
+      .catch(error => {
+          console.error("Error:", error);
+          document.getElementById("NombreAsign").value = "Error al consultar";
+      });
+}
+
+// Agregar Estudiante a Asignatura 
+function agregarEstudianteAsignatura(event) {
+  event.preventDefault();
+  
+  const codigoEst = document.getElementById("CodEst").value;
+  const tipoDoc = document.getElementById("TipoDoc").value;
+  const codigoAsign = document.getElementById("CodigoAsign").value;
+  const grupoAsign = document.getElementById("GrupoAsign").value;
+
+  fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+          codigoEstudiante: codigoEst,
+          tipoDocumento: tipoDoc,
+          codigoAsignatura: codigoAsign,
+          grupo: grupoAsign
+      })
+  })
+  .then(response => response.text())
+  .then(result => {
+      alert("Estudiante agregado a la asignatura");
+      console.log(result);
+  })
+  .catch(error => {
+      console.error("Error:", error);
+      alert("Error al agregar estudiante");
+  });
+}

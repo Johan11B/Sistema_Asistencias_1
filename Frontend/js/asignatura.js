@@ -8,7 +8,7 @@ function registrarAsignatura(event) {
     let raw = JSON.stringify({
       "nombre": document.getElementById("nombreAsig").value,
       "codigo": document.getElementById("codigo").value,
-      "creditos": document.getElementById("SemestreAgre").value, // Nota: Hay un error en el HTML, debería ser creditos, no SemestreAgre
+      "creditos": document.getElementById("creditos").value, 
       "grupo": document.getElementById("grupo").value,
       "semestre": document.getElementById("SemestreAgre").value
     });
@@ -44,7 +44,6 @@ function registrarAsignatura(event) {
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("NomAsig").value = result.nombre || "No encontrada";
-        // Nota: Hay dos campos con id="NomAsig" en tu HTML, deberías corregir esto
       })
       .catch((error) => {
         console.error(error);
