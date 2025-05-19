@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../estilos css/department.css">
-    <link rel="icon" href="../imágenes/escudo-color.png" type="png">
-    <title>Departamento</title>
+    <!-- Metadatos: configuración básica del documento -->
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptabilidad a móviles -->
+    <link rel="stylesheet" href="../estilos css/department.css"> <!-- Hoja de estilos -->
+    <link rel="icon" href="../imágenes/escudo-color.png" type="png"> <!-- Icono de la pestaña -->
+    <title>Departamento</title> <!-- Título de la página -->
 </head>
 <body>
+    <!-- Encabezado de la página -->
     <header class="header_dp">
-        <h1>Departamento</h1>
+        <h1>Departamento</h1> <!-- Título principal -->
         <div class="back_button">
-            <a href="../../index.html"> ⮐ Volver</a>
+            <a href="../../index.html"> ⮐ Volver</a> <!-- Botón de regreso -->
         </div>
     </header>
+    
+    <!-- Formulario principal -->
     <form class="main_form">
+        <!-- Sección de consulta -->
         <fieldset class="form_content">
             <label class="information_item" for="consult">Nombre del departamento</label>
-            <br>
-            <br>
+            <br><br>
             <input class="text_box" type="text" placeholder="Aquí aparecerá el nombre del depa" id="NomDep" readonly autocomplete="off">
-            <input class="boton_form" type="submit" value="Consultar" id="consult" onclick="mostrar(event)">
+            <button class="boton_form" type="button" id="consult" onclick="mostrar(event)">Consultar</button>
         </fieldset>
+        
+        <!-- Sección de modificación -->
         <fieldset class="form_content">
             <label class="information_item" for="Modif">Modificar nombre del departamento</label>
-            <br>
-            <br>
+            <br><br>
             <input class="text_box modif_textbox" type="text" placeholder="Nuevo nombre del departamento" minlength="4" maxlength="50" id="NewDep" autocomplete="off">
-            <input class="boton_form" type="submit" value="Modificar" id="Modif" onclick="Modify(event)">
+            <button class="boton_form" type="button" id="Modif" onclick="Modify(event)">Modificar</button>
         </fieldset>
     </form>
-    <script src="../js/funcionalidades.js"></script>
+    
+    <!-- Inclusión del archivo JavaScript -->
+    <script src="../js/departamento.js"></script>
 </body>
 </html>

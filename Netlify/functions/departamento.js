@@ -4,11 +4,14 @@ var serverless = require('serverless-http');
 var app = express();
 var departamentoroutes = require("../../Backend/routes/departamentoroutes");
 
-app.use(express.json());
-app.use(cors());
+// Middlewares
+app.use(express.json()); // Para parsear JSON
+app.use(cors()); // Para permitir peticiones cruzadas
 
+// Configuración del router
 var router = express.Router();
 router.use("/", departamentoroutes);
 app.use("/", router);
 
+// Exportación para Netlify
 exports.handler = serverless(app);
