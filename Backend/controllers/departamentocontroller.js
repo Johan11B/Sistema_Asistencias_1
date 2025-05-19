@@ -1,6 +1,7 @@
 exports.consultar = async (req, res) => {
     try {
-        res.json({ nombre: "Nombre del Departamento" }); // Respuesta simulada
+        // Lógica para consultar el nombre del departamento
+        res.json({ nombre: "Nombre del Departamento" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -9,7 +10,7 @@ exports.consultar = async (req, res) => {
 exports.modificar = async (req, res) => {
     try {
         const { nuevoNombre } = req.body;
-        console.log("Nuevo nombre recibido:", nuevoNombre); // Simulación
+        // Lógica para modificar el nombre del departamento
         res.send("Departamento modificado exitosamente");
     } catch (error) {
         res.status(400).json({ error: error.message });

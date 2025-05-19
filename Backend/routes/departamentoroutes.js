@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const departamentoController = require("../controllers/departamentocontrollers.js");
+const estudiantescontroller = require("../controllers/departamentocontroller")
 
-router.get("/", departamentoController.consultar);
-router.put("/", departamentoController.modificar); // <- Aquí se agrega la ruta PUT
+router.get("/",estudiantescontroller.consultar)
+router.post("/",estudiantescontroller.ingresar)
+
 
 module.exports = router;
