@@ -1,9 +1,6 @@
-// controllers/departamentocontroller.js
-
 exports.consultar = async (req, res) => {
     try {
-        // Lógica para consultar el nombre del departamento
-        res.json({ nombre: "Nombre del Departamento" });
+        res.json({ nombre: "Nombre del Departamento" }); // Respuesta simulada
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -12,7 +9,7 @@ exports.consultar = async (req, res) => {
 exports.modificar = async (req, res) => {
     try {
         const { nuevoNombre } = req.body;
-        // Lógica para modificar el nombre del departamento
+        console.log("Nuevo nombre recibido:", nuevoNombre); // Simulación
         res.send("Departamento modificado exitosamente");
     } catch (error) {
         res.status(400).json({ error: error.message });
