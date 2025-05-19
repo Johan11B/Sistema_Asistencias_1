@@ -20,7 +20,7 @@ function registrarAsignatura(event) {
       redirect: "follow"
     };
   
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", requestOptions)
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);
@@ -40,7 +40,7 @@ function registrarAsignatura(event) {
     const semestre = document.getElementById("SemestreConsulta").value;
     const grupo = document.getElementById("secConsulta").value;
   
-    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}`)
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura`)
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("NomAsig").value = result.nombre || "No encontrada";
@@ -59,7 +59,7 @@ function registrarAsignatura(event) {
     const semestre = document.getElementById("SemestreConsulta").value;
     const grupo = document.getElementById("secConsulta").value;
   
-    fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}`)
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura`)
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("nuevoNombre").value = result.nombre || "";
@@ -93,7 +93,7 @@ function registrarAsignatura(event) {
       redirect: "follow"
     };
   
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", requestOptions)
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);

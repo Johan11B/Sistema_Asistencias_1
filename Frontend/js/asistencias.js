@@ -20,7 +20,7 @@ function crearlista(event) {
     redirect: "follow"
   };
 
-  fetch("https://tu-sitio.netlify.app/.netlify/functions/asistencias", requestOptions)
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias", requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log(result);
@@ -40,7 +40,7 @@ function buscarlista(event) {
   const fecha = document.getElementById("fechallenar").value;
   const horaInicio = document.getElementById("horainillenar").value;
 
-  fetch(`https://tu-sitio.netlify.app/.netlify/functions/asistencias?codigo=${codigo}&fecha=${fecha}&horaInicio=${horaInicio}`)
+  fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias`)
     .then((response) => response.json())
     .then((result) => {
       const tabla = document.querySelector("#tablaAsisLlenar tbody");
@@ -108,7 +108,7 @@ function lleanarlista(event) {
     redirect: "follow"
   };
 
-  fetch("https://tu-sitio.netlify.app/.netlify/functions/asistencias", requestOptions)
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias", requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log(result);
@@ -130,7 +130,7 @@ function buscarListaModificar(event) {
   const numDoc = document.getElementById("numDocMod").value;
   const tipoDoc = document.querySelector("#codigomod ~ fieldset select").value;
 
-  fetch(`https://tu-sitio.netlify.app/.netlify/functions/asistencias?codigo=${codigo}&fecha=${fecha}&horaInicio=${horaInicio}`)
+  fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias`)
     .then((response) => response.json())
     .then((result) => {
       const tabla = document.querySelector("#tablaAsisMod tbody");
@@ -215,7 +215,7 @@ function modificarAsistencia(event) {
     redirect: "follow"
   };
 
-  fetch("https://tu-sitio.netlify.app/.netlify/functions/asistencias", requestOptions)
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias", requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log(result);
@@ -237,7 +237,7 @@ function consultarAsistencia(event) {
   const fecha = document.getElementById("fechacon").value;
   const horaInicio = document.getElementById("horainicon").value;
 
-  fetch(`https://tu-sitio.netlify.app/.netlify/functions/asistencias?codigo=${codigo}&semestre=${semestre}&grupo=${grupo}&fecha=${fecha}&horaInicio=${horaInicio}`)
+  fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asistencias`)
     .then((response) => response.json())
     .then((result) => {
       const tabla = document.querySelector("#tablaAsisCon tbody");

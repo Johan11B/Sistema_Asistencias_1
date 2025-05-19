@@ -18,7 +18,7 @@ function registrarEstudiante(event) {
       redirect: "follow"
     };
   
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/estudiantes", requestOptions)
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);
@@ -37,7 +37,7 @@ function registrarEstudiante(event) {
     const tipoDoc = document.querySelector("#consultarEst ~ select").value;
     const numDoc = document.getElementById("numDocConsulta").value;
   
-    fetch(`https://tu-sitio.netlify.app/.netlify/functions/estudiantes?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("NomEst").value = result.nombre || "No encontrado";
@@ -55,7 +55,7 @@ function registrarEstudiante(event) {
     const tipoDoc = document.getElementById("tipoDocMod").value;
     const numDoc = document.getElementById("numDocMod").value;
   
-    fetch(`https://tu-sitio.netlify.app/.netlify/functions/estudiantes?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("NuevoNombre").value = result.nombre || "";
@@ -87,7 +87,7 @@ function registrarEstudiante(event) {
       redirect: "follow"
     };
   
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/estudiantes", requestOptions)
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);
@@ -106,7 +106,7 @@ function consultarAsignatura(event) {
   const grupo = document.getElementById("GrupoAsign").value;
   const semestre = document.getElementById("SemestreAsign").value;
 
-  fetch(`https://tu-sitio.netlify.app/.netlify/functions/asignaturas?codigo=${codigo}&grupo=${grupo}&semestre=${semestre}`)
+  fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
       .then(response => response.json())
       .then(data => {
           document.getElementById("NombreAsign").value = data.nombre || "No encontrada";
@@ -126,7 +126,7 @@ function agregarEstudianteAsignatura(event) {
   const codigoAsign = document.getElementById("CodigoAsign").value;
   const grupoAsign = document.getElementById("GrupoAsign").value;
 
-  fetch("https://tu-sitio.netlify.app/.netlify/functions/asignaturas", {
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -2,7 +2,7 @@
 function mostrar(event) {
     event.preventDefault();
     
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/departamento")
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento")
       .then((response) => response.json())
       .then((result) => {
         document.getElementById("NomDep").value = result.nombre || "No encontrado";
@@ -31,7 +31,7 @@ function mostrar(event) {
       redirect: "follow"
     };
   
-    fetch("https://tu-sitio.netlify.app/.netlify/functions/departamento", requestOptions)
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);
