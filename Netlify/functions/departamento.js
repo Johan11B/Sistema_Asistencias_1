@@ -1,17 +1,13 @@
 var express = require('express');
 var cors = require("cors");
-var serverless = require('serverless-http');
+var serverless = require ('serverless-http');
+var port = process.env.PORT || 5000;
 var app = express();
-var departamentoroutes = require("../../Backend/routes/departamentoroutes");
+var departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
+app.use(express.json());
+app.use(cors());
 
-// Middlewares
-app.use(express.json()); // Para parsear JSON
-app.use(cors()); // Para permitir peticiones cruzadas
-
-// Configuración del router
 var router = express.Router();
-router.use("/", departamentoroutes);
-app.use("/", router);
-
-// Exportación para Netlify
-exports.handler = serverless(app);
+router.use ("/departamento",departamentoroutes);
+var handler = app.use ('/.netlify/functions',router);
+exports.handler = serverless (app);

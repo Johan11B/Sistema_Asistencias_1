@@ -1,68 +1,61 @@
-// 1. SIMULACIÓN DE DATOS (para cuando el backend no responda)
-let nombreDepartamento = "Departamento de Matemáticas";
+// Mostrar Departamento
 
-// 2. FUNCIÓN PARA MOSTRAR EL DEPARTAMENTO
-function mostrar(event) {
-    if(event) event.preventDefault(); // Evita el comportamiento por defecto del formulario
+let nombreDepartamento = "Ingeniería de Sistemas";
+
+function mostrar(event){
+  if(event){
+    event.preventDefault();
+  }
+  document.getElementById("NomDep").value = nombreDepartamento;
+/**function mostrar(event) {
+    event.preventDefault();
     
-    // Versión simulada (trabaja localmente)
-    document.getElementById("NomDep").value = nombreDepartamento;
-    
-    /* 
-    // Versión real para producción (comunicación con backend):
-    fetch("https://tudominio.netlify.app/.netlify/functions/departamento")
-      .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
+    fetch("https://ejemplofirebase.netlify.app/.netlify/functions/departamento")
+      .then((response) => response.json())
+      .then((result) => {
+        document.getElementById("NomDep").value = result.nombre || "No encontrado";
       })
-      .then(data => {
-        document.getElementById("NomDep").value = data.nombre || "No encontrado";
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        document.getElementById("NomDep").value = "Error al cargar";
+      .catch((error) => {
+        console.error(error);
+        document.getElementById("NomDep").value = "Error al consultar";
       });
-    */
+  }**/
 }
-
-// 3. FUNCIÓN PARA MODIFICAR EL DEPARTAMENTO
+  // Modificar Departamento
 function Modify(event) {
-    event.preventDefault(); // Evita el envío del formulario
-    
+    event.preventDefault();
     const nuevoNombre = document.getElementById("NewDep").value.trim();
-    
-    // Validación del input
-    if (nuevoNombre.length < 4 || nuevoNombre.length > 50) {
-        alert("El nombre debe tener entre 4 y 50 caracteres");
-        return;
-    }
-    
-    // Versión simulada (actualización local)
-    nombreDepartamento = nuevoNombre;
-    document.getElementById("NomDep").value = nombreDepartamento;
-    document.getElementById("NewDep").value = ""; // Limpia el campo
-    alert("Departamento modificado exitosamente");
-    
-    /*
-    // Versión real para producción:
-    fetch("https://tudominio.netlify.app/.netlify/functions/departamento", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nuevoNombre })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.mensaje || "Modificación exitosa");
-        mostrar(event); // Actualiza la visualización
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Error al modificar");
-    });
-    */
-}
 
-// 4. CARGA INICIAL AUTOMÁTICA
-window.onload = function() {
-    mostrar(); // Ejecuta mostrar() cuando la página termina de cargar
-};
+    if(nuevoNombre.length < 4 || nuevoNombre.length >50){
+      alert("El nuevo nombre debe tener entre 4 y 50 carácteres");
+      return;
+    }
+    nombreDepartamento = nuevoNombre;
+    document.getElementById("NewDep").value = "";
+
+    /*const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "nuevoNombre": document.getElementById("NewDep").value
+    });
+  
+    let requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+  
+    fetch("https://ejemplofirebase.netlify.app/.netlify/functions/departamento", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Departamento modificado exitosamente");
+        mostrar(event); 
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al modificar departamento");
+      });*/
+}
