@@ -1,148 +1,118 @@
-// Registrar Estudiante en el Departamento
+// Datos simulados (solo para desarrollo)
+let estudiantes = [];
+
+// Registrar Estudiante
 function registrarEstudiante(event) {
     event.preventDefault();
     
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    let raw = JSON.stringify({
-      "nombre": document.getElementById("nombreEst").value,
-      "tipoDocumento": document.getElementById("tipoDocEst").value,
-      "numeroDocumento": document.getElementById("numDocEst").value
-    });
-  
-    let requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
+    const data = {
+        nombre: document.getElementById("nombreEst").value,
+        tipoDocumento: document.getElementById("tipoDocEst").value,
+        numeroDocumento: document.getElementById("numDocEst").value
     };
-  
-    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        alert("Estudiante registrado exitosamente");
-      })
-      .catch((error) => {
+    
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Error en el servidor");
+        return response.json();
+    })
+    .then(result => {
+        alert(result.mensaje || "Estudiante registrado exitosamente");
+        console.log(result.estudiante);
+    })
+    .catch(error => {
         console.error(error);
-        alert("Error al registrar estudiante");
-      });
-  }
-  
-  // Consultar Estudiante en el Departamento
-  function consultarEstudiante(event) {
+        alert(error.message || "Error al registrar estudiante");
+    });
+}
+
+// Consultar Estudiante
+function consultarEstudiante(event) {
     event.preventDefault();
     
     const tipoDoc = document.querySelector("#consultarEst ~ select").value;
     const numDoc = document.getElementById("numDocConsulta").value;
-  
-    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
-      .then((response) => response.json())
-      .then((result) => {
-        document.getElementById("NomEst").value = result.nombre || "No encontrado";
-      })
-      .catch((error) => {
+    
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
+    .then(response => {
+        if (!response.ok) throw new Error("Error en el servidor");
+        return response.json();
+    })
+    .then(estudiante => {
+        document.getElementById("NomEst").value = estudiante.nombre || "No encontrado";
+    })
+    .catch(error => {
         console.error(error);
         document.getElementById("NomEst").value = "Error al consultar";
-      });
-  }
-  
-  // Buscar Estudiante para Modificar
-  function buscarEstudiante(event) {
+    });
+}
+
+// Buscar Estudiante para Modificar
+function buscarEstudiante(event) {
     event.preventDefault();
     
     const tipoDoc = document.getElementById("tipoDocMod").value;
     const numDoc = document.getElementById("numDocMod").value;
-  
-    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
-      .then((response) => response.json())
-      .then((result) => {
-        document.getElementById("NuevoNombre").value = result.nombre || "";
-      })
-      .catch((error) => {
+    
+    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
+    .then(response => {
+        if (!response.ok) throw new Error("Error en el servidor");
+        return response.json();
+    })
+    .then(estudiante => {
+        document.getElementById("NuevoNombre").value = estudiante.nombre || "";
+    })
+    .catch(error => {
         console.error(error);
-        alert("Error al buscar estudiante");
-      });
-  }
-  
-  // Modificar Estudiante
-  function modificarEstudiante(event) {
+        alert(error.message || "Error al buscar estudiante");
+    });
+}
+
+// Modificar Estudiante
+function modificarEstudiante(event) {
     event.preventDefault();
     
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    let raw = JSON.stringify({
-      "tipoDocumento": document.getElementById("tipoDocMod").value,
-      "numeroDocumento": document.getElementById("numDocMod").value,
-      "nuevoNombre": document.getElementById("NuevoNombre").value,
-      "nuevoTipoDoc": document.getElementById("nuevoTipoDoc").value
-    });
-  
-    let requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
+    const data = {
+        tipoDocumento: document.getElementById("tipoDocMod").value,
+        numeroDocumento: document.getElementById("numDocMod").value,
+        nuevoNombre: document.getElementById("NuevoNombre").value,
+        nuevoTipoDoc: document.getElementById("nuevoTipoDoc").value
     };
-  
-    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        alert("Estudiante modificado exitosamente");
-      })
-      .catch((error) => {
+    
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Error en el servidor");
+        return response.json();
+    })
+    .then(result => {
+        alert(result.mensaje || "Estudiante modificado exitosamente");
+    })
+    .catch(error => {
         console.error(error);
-        alert("Error al modificar estudiante");
-      });
-  }
-  // Consultar Asignatura (nueva función)
-function consultarAsignatura(event) {
-  event.preventDefault();
-  
-  const codigo = document.getElementById("CodigoAsign").value;
-  const grupo = document.getElementById("GrupoAsign").value;
-  const semestre = document.getElementById("SemestreAsign").value;
+        alert(error.message || "Error al modificar estudiante");
+    });
+}
 
-  fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes`)
-      .then(response => response.json())
-      .then(data => {
-          document.getElementById("NombreAsign").value = data.nombre || "No encontrada";
-      })
-      .catch(error => {
-          console.error("Error:", error);
-          document.getElementById("NombreAsign").value = "Error al consultar";
-      });
+// Consultar Asignatura
+function consultarAsignatura(event) {
+    event.preventDefault();
+    
+    // Simulación - en un sistema real harías una llamada al backend
+    document.getElementById("NombreAsign").value = "Asignatura de Ejemplo";
 }
 
 // Agregar Estudiante a Asignatura 
 function agregarEstudianteAsignatura(event) {
-  event.preventDefault();
-  
-  const codigoEst = document.getElementById("CodEst").value;
-  const tipoDoc = document.getElementById("TipoDoc").value;
-  const codigoAsign = document.getElementById("CodigoAsign").value;
-  const grupoAsign = document.getElementById("GrupoAsign").value;
-
-  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-          codigoEstudiante: codigoEst,
-          tipoDocumento: tipoDoc,
-          codigoAsignatura: codigoAsign,
-          grupo: grupoAsign
-      })
-  })
-  .then(response => response.text())
-  .then(result => {
-      alert("Estudiante agregado a la asignatura");
-      console.log(result);
-  })
-  .catch(error => {
-      console.error("Error:", error);
-      alert("Error al agregar estudiante");
-  });
+    event.preventDefault();
+    
+    // Simulación - en un sistema real harías una llamada al backend
+    alert("Estudiante agregado a la asignatura (simulación)");
 }
