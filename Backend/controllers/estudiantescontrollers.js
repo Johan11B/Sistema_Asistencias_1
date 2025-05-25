@@ -1,83 +1,75 @@
-// Simulación de datos
-let estudiantes = [
-    { id: 1, tipoDocumento: "CC", numeroDocumento: "123456", nombre: "Juan Pérez" },
-    { id: 2, tipoDocumento: "TI", numeroDocumento: "654321", nombre: "María García" }
+// Datos quemados de estudiantes
+const estudiantes = [
+    {
+        tipoDocumento: "CC",
+        numeroDocumento: "12345678",
+        nombre: "Juan Pérez",
+        email: "juan@example.com",
+        departamento: "Matemáticas"
+    },
+    {
+        tipoDocumento: "TI",
+        numeroDocumento: "98765432",
+        nombre: "María García",
+        email: "maria@example.com",
+        departamento: "Ingeniería"
+    }
 ];
 
+// Consultar estudiante
 exports.consultar = async (req, res) => {
     try {
         const { tipoDoc, numDoc } = req.query;
         
-        // Si se proporcionan parámetros, buscar estudiante específico
-        if (tipoDoc && numDoc) {
-            const estudiante = estudiantes.find(e => 
-                e.tipoDocumento === tipoDoc && e.numeroDocumento === numDoc
-            );
-            
-            if (!estudiante) {
-                return res.status(404).json({ error: "Estudiante no encontrado" });
-            }
-            
-            return res.json(estudiante);
+        // Respuesta quemada para consulta sin parámetros
+        if (!tipoDoc || !numDoc) {
+            return res.json(estudiantes); // Devuelve todos los estudiantes
         }
         
-        // Si no hay parámetros, devolver todos los estudiantes
-        res.json(estudiantes);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-exports.ingresar = async (req, res) => {
-    try {
-        const { nombre, tipoDocumento, numeroDocumento } = req.body;
-        
-        // Validación básica
-        if (!nombre || !tipoDocumento || !numeroDocumento) {
-            throw new Error("Todos los campos son obligatorios");
-        }
-        
-        // Crear nuevo estudiante
-        const nuevoEstudiante = {
-            id: estudiantes.length + 1,
-            tipoDocumento,
-            numeroDocumento,
-            nombre
-        };
-        
-        estudiantes.push(nuevoEstudiante);
-        
-        res.status(201).json({ 
-            mensaje: "Estudiante registrado exitosamente",
-            estudiante: nuevoEstudiante
-        });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-exports.modificar = async (req, res) => {
-    try {
-        const { tipoDocumento, numeroDocumento, nuevoNombre, nuevoTipoDoc } = req.body;
-        
-        // Buscar estudiante
-        const index = estudiantes.findIndex(e => 
-            e.tipoDocumento === tipoDocumento && e.numeroDocumento === numeroDocumento
+        // Buscar estudiante específico (simulado)
+        const estudiante = estudiantes.find(e => 
+            e.tipoDocumento === tipoDoc && e.numeroDocumento === numDoc
         );
         
-        if (index === -1) {
-            return res.status(404).json({ error: "Estudiante no encontrado" });
+        // Respuesta quemada si no encuentra
+        if (!estudiante) {
+            return res.json({ 
+                tipoDocumento: tipoDoc,
+                numeroDocumento: numDoc,
+                nombre: "Estudiante de Ejemplo",
+                email: "ejemplo@universidad.edu",
+                departamento: "Ciencias"
+            });
         }
         
-        // Actualizar datos
-        if (nuevoNombre) estudiantes[index].nombre = nuevoNombre;
-        if (nuevoTipoDoc) estudiantes[index].tipoDocumento = nuevoTipoDoc;
-        
-        res.json({ 
-            mensaje: "Estudiante modificado exitosamente",
-            estudiante: estudiantes[index]
+        res.json(estudiante);
+    } catch (error) {
+        res.status(500).json({ error: "Error en el servidor (simulado)" });
+    }
+};
+
+// Ingresar nuevo estudiante (simulado)
+exports.ingresar = async (req, res) => {
+    try {
+        // Respuesta quemada de éxito
+        res.status(200).json({ 
+            mensaje: "Estudiante registrado exitosamente",
+            datos: req.body
         });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: "Datos inválidos (simulado)" });
+    }
+};
+
+// Modificar estudiante (simulado)
+exports.modificar = async (req, res) => {
+    try {
+        // Respuesta quemada de éxito
+        res.status(200).json({ 
+            mensaje: "Estudiante modificado exitosamente",
+            cambios: req.body
+        });
+    } catch (error) {
+        res.status(400).json({ error: "Error al modificar (simulado)" });
     }
 };
