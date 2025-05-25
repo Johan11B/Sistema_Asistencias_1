@@ -2,7 +2,7 @@
 function mostrar(event) {
     if(event) event.preventDefault();
     
-    fetch("https://tudominio.netlify.app/.netlify/functions/departamento")
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento")
       .then(response => {
         if (!response.ok) throw new Error("Error en el servidor");
         return response.json();
@@ -27,7 +27,7 @@ function Modify(event) {
         return;
     }
     
-    fetch("https://tudominio.netlify.app/.netlify/functions/departamento", {
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nuevoNombre })
