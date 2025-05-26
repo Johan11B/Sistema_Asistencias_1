@@ -1,54 +1,30 @@
-// Base de datos simulada (en memoria)
+// Base de datos local simulada
 let asignaturas = [
-    {
-        codigo: "MAT101",
-        nombre: "Matemáticas Básicas",
-        creditos: 4,
-        grupo: "G01",
-        semestre: 1
-    },
-    {
-        codigo: "PROG201",
-        nombre: "Programación I",
-        creditos: 3,
-        grupo: "G02",
-        semestre: 2
-    }
+    {codigo: "IS001", nombre: "Programación I", creditos: 3, grupo: "401M", semestre: 3},
+    {codigo: "IS002", nombre: "Bases de Datos", creditos: 4, grupo: "402M", semestre: 4}
 ];
 
 // 1. Registrar Asignatura (Versión Local)
 function registrarAsignatura(event) {
     event.preventDefault();
     
-    const nuevaAsignatura = {
-        nombre: document.getElementById("nombreAsig").value.trim(),
-        codigo: document.getElementById("codigo").value.trim(),
-        creditos: parseInt(document.getElementById("creditos").value),
-        grupo: document.getElementById("grupo").value.trim(),
-        semestre: parseInt(document.getElementById("SemestreAgre").value)
-    };
+    const nombre = document.getElementById("nombreAsig").value.trim();
+    const codigo = document.getElementById("codigo").value.trim();
+    const creditos = parseInt(document.getElementById("creditos").value);
+    const grupo = document.getElementById("grupo").value.trim();
+    const semestre = parseInt(document.getElementById("semestre").value);
 
-    // Validaciones
-    if (nuevaAsignatura.nombre.length < 5 || nuevaAsignatura.nombre.length > 100) {
-        alert("El nombre debe tener entre 5 y 100 caracteres");
-        return;
-    }
-
-    if (nuevaAsignatura.codigo.length < 3 || nuevaAsignatura.codigo.length > 10) {
-        alert("El código debe tener entre 3 y 10 caracteres");
-        return;
-    }
-
-    if (isNaN(nuevaAsignatura.creditos)) {
-        alert("Los créditos deben ser un número válido");
+    // Validaciones básicas
+    if (!nombre || !codigo || isNaN(creditos) || !grupo || isNaN(semestre)) {
+        alert("Todos los campos son requeridos y deben ser válidos");
         return;
     }
 
     // Verificar si ya existe
-    const existe = asignaturas.some(a => 
-        a.codigo === nuevaAsignatura.codigo && 
-        a.grupo === nuevaAsignatura.grupo && 
-        a.semestre === nuevaAsignatura.semestre
+    const existe = asignaturas.some(asig => 
+        asig.codigo === codigo && 
+        asig.grupo === grupo && 
+        asig.semestre === semestre
     );
 
     if (existe) {
@@ -56,8 +32,15 @@ function registrarAsignatura(event) {
         return;
     }
 
-    // Registrar nueva asignatura
-    asignaturas.push(nuevaAsignatura);
+    // Agregar nueva asignatura
+    asignaturas.push({
+        nombre,
+        codigo,
+        creditos,
+        grupo,
+        semestre
+    });
+
     alert("Asignatura registrada exitosamente");
     
     // Limpiar formulario
@@ -65,10 +48,90 @@ function registrarAsignatura(event) {
     document.getElementById("codigo").value = "";
     document.getElementById("creditos").value = "";
     document.getElementById("grupo").value = "";
-    document.getElementById("SemestreAgre").value = "";
+    document.getElementById("semestre").value = "";
+}
 
-    /*
-    // Versión con Fetch (comentada)
+// 2. Consultar Asignatura (Versión Local)
+function consultarAsignatura(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
+
+    const asignatura = asignaturas.find(asig => 
+        asig.codigo === codigo && 
+        asig.semestre === semestre && 
+        asig.grupo === grupo
+    );
+
+    if (asignatura) {
+        document.getElementById("NomAsig").value = asignatura.nombre;
+        document.getElementById("CreAsig").value = asignatura.creditos;
+    } else {
+        document.getElementById("NomAsig").value = "No encontrada";
+        document.getElementById("CreAsig").value = "";
+    }
+}
+
+// 3. Buscar Asignatura para Modificar (Versión Local)
+function buscarAsignatura(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
+
+    const asignatura = asignaturas.find(asig => 
+        asig.codigo === codigo && 
+        asig.semestre === semestre && 
+        asig.grupo === grupo
+    );
+
+    if (asignatura) {
+        document.getElementById("nuevoNombre").value = asignatura.nombre;
+        document.getElementById("nuevosCreditos").value = asignatura.creditos;
+    } else {
+        alert("Asignatura no encontrada");
+    }
+}
+
+// 4. Modificar Asignatura (Versión Local)
+function modificarAsignatura(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
+    const nuevoNombre = document.getElementById("nuevoNombre").value.trim();
+    const nuevosCreditos = parseInt(document.getElementById("nuevosCreditos").value);
+
+    // Validaciones
+    if (!nuevoNombre || isNaN(nuevosCreditos)) {
+        alert("Todos los campos son requeridos");
+        return;
+    }
+
+    const index = asignaturas.findIndex(asig => 
+        asig.codigo === codigo && 
+        asig.semestre === semestre && 
+        asig.grupo === grupo
+    );
+
+    if (index !== -1) {
+        asignaturas[index].nombre = nuevoNombre;
+        asignaturas[index].creditos = nuevosCreditos;
+        alert("Asignatura modificada exitosamente");
+    } else {
+        alert("Asignatura no encontrada");
+    }
+}
+
+/*
+// Versión con backend (comentada para referencia)
+function registrarAsignaturaBackend(event) {
+    event.preventDefault();
+    
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
   
@@ -87,7 +150,7 @@ function registrarAsignatura(event) {
       redirect: "follow"
     };
   
-    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura", requestOptions)
+    fetch("https://ejemplofirebase.netlify.app/.netlify/functions/asignaturas", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log(result);
@@ -97,147 +160,11 @@ function registrarAsignatura(event) {
         console.error(error);
         alert("Error al registrar asignatura");
       });
-    */
 }
+*/
 
-// 2. Consultar Asignatura (Versión Local)
-function consultarAsignatura(event) {
-    event.preventDefault();
-    
-    const codigo = document.getElementById("tipoCodConsulta").value;
-    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
-    const grupo = document.getElementById("secConsulta").value;
-
-    const asignatura = asignaturas.find(a => 
-        a.codigo === codigo && 
-        a.semestre === semestre && 
-        a.grupo === grupo
-    );
-
-    document.getElementById("NomAsig").value = asignatura ? asignatura.nombre : "No encontrada";
-
-    /*
-    // Versión con Fetch (comentada)
-    const codigo = document.getElementById("tipoCodConsulta").value;
-    const semestre = document.getElementById("SemestreConsulta").value;
-    const grupo = document.getElementById("secConsulta").value;
-  
-    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura`)
-      .then((response) => response.json())
-      .then((result) => {
-        document.getElementById("NomAsig").value = result.nombre || "No encontrada";
-      })
-      .catch((error) => {
-        console.error(error);
-        document.getElementById("NomAsig").value = "Error al consultar";
-      });
-    */
-}
-
-// 3. Buscar Asignatura para Modificar (Versión Local)
-function buscarAsignatura(event) {
-    event.preventDefault();
-    
-    const codigo = document.getElementById("tipoCodConsulta").value;
-    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
-    const grupo = document.getElementById("secConsulta").value;
-
-    const asignatura = asignaturas.find(a => 
-        a.codigo === codigo && 
-        a.semestre === semestre && 
-        a.grupo === grupo
-    );
-
-    if (asignatura) {
-        document.getElementById("nuevoNombre").value = asignatura.nombre;
-        document.getElementById("nuevosCreditos").value = asignatura.creditos;
-    } else {
-        alert("Asignatura no encontrada");
-    }
-
-    /*
-    // Versión con Fetch (comentada)
-    const codigo = document.getElementById("tipoCodConsulta").value;
-    const semestre = document.getElementById("SemestreConsulta").value;
-    const grupo = document.getElementById("secConsulta").value;
-  
-    fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura`)
-      .then((response) => response.json())
-      .then((result) => {
-        document.getElementById("nuevoNombre").value = result.nombre || "";
-        document.getElementById("nuevosCreditos").value = result.creditos || "";
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error al buscar asignatura");
-      });
-    */
-}
-
-// 4. Modificar Asignatura (Versión Local)
-function modificarAsignatura(event) {
-    event.preventDefault();
-    
-    const codigo = document.getElementById("tipoCodConsulta").value;
-    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
-    const grupo = document.getElementById("secConsulta").value;
-    const nuevoNombre = document.getElementById("nuevoNombre").value.trim();
-    const nuevosCreditos = parseInt(document.getElementById("nuevosCreditos").value);
-
-    // Validaciones
-    if (nuevoNombre.length < 5 || nuevoNombre.length > 100) {
-        alert("El nombre debe tener entre 5 y 100 caracteres");
-        return;
-    }
-
-    if (isNaN(nuevosCreditos)) {
-        alert("Los créditos deben ser un número válido");
-        return;
-    }
-
-    const index = asignaturas.findIndex(a => 
-        a.codigo === codigo && 
-        a.semestre === semestre && 
-        a.grupo === grupo
-    );
-
-    if (index !== -1) {
-        asignaturas[index].nombre = nuevoNombre;
-        asignaturas[index].creditos = nuevosCreditos;
-        alert("Asignatura modificada exitosamente");
-    } else {
-        alert("Asignatura no encontrada");
-    }
-
-    /*
-    // Versión con Fetch (comentada)
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    let raw = JSON.stringify({
-      "codigo": document.getElementById("tipoCodConsulta").value,
-      "semestre": document.getElementById("SemestreConsulta").value,
-      "grupo": document.getElementById("secConsulta").value,
-      "nuevoNombre": document.getElementById("nuevoNombre").value,
-      "nuevosCreditos": document.getElementById("nuevosCreditos").value
-    });
-  
-    let requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-  
-    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        alert("Asignatura modificada exitosamente");
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error al modificar asignatura");
-      });
-    */
-}
+// Asignar eventos a los botones
+document.getElementById("registrarAsig").addEventListener("click", registrarAsignatura);
+document.getElementById("consultarAsig").addEventListener("click", consultarAsignatura);
+document.getElementById("buscarAsig").addEventListener("click", buscarAsignatura);
+document.getElementById("modificarAsig").addEventListener("click", modificarAsignatura);

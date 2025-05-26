@@ -1,82 +1,32 @@
-// Base de datos simulada
-let asignaturasDB = [
-    {codigo: "IS001", nombre: "Programación I", creditos: 3, grupo: "401M", semestre: 3},
-    {codigo: "IS002", nombre: "Bases de Datos", creditos: 4, grupo: "402M", semestre: 4}
-];
-
-exports.consultar = async (req, res) => {
-    try {
-        const { codigo, grupo, semestre } = req.query;
-        
-        const asignatura = asignaturasDB.find(a => 
-            a.codigo === codigo && 
-            a.grupo === grupo && 
-            a.semestre === parseInt(semestre)
-        );
-        
-        if (asignatura) {
-            res.json(asignatura);
-        } else {
-            res.status(404).json({ error: "Asignatura no encontrada" });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+class EstudiantesController{
+    constructor(){
     }
-};
+    consultar(req,res){
+        try{
+            let arreglo=[];
+            let myObj = {Nombre: "Daniel Esteban", Tipo_Documento: "CC", Codigo: "1077112696"};
+            let myObj2 = {Nombre: "Pedro Gónzales", Tipo_Documento: "CC", Codigo: "1037112636"};
 
-exports.ingresar = async (req, res) => {
-    try {
-        const { nombre, codigo, creditos, grupo, semestre } = req.body;
-        
-        // Validaciones
-        if (!nombre || !codigo || !creditos || !grupo || !semestre) {
-            return res.status(400).json({ error: "Todos los campos son requeridos" });
-        }
-        
-        // Verificar si ya existe
-        const existe = asignaturasDB.some(a => 
-            a.codigo === codigo && 
-            a.grupo === grupo && 
-            a.semestre === parseInt(semestre)
-        );
-        
-        if (existe) {
-            return res.status(400).json({ error: "La asignatura ya está registrada" });
-        }
-        
-        // Registrar nueva asignatura
-        asignaturasDB.push({ 
-            nombre, 
-            codigo, 
-            creditos: parseInt(creditos), 
-            grupo, 
-            semestre: parseInt(semestre)
-        });
-        
-        res.status(201).send("Asignatura registrada exitosamente");
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+            arreglo.push (myObj);
+            arreglo.push (myObj2);
 
-exports.modificar = async (req, res) => {
-    try {
-        const { codigo, grupo, semestre, nuevoNombre, nuevosCreditos } = req.body;
-        
-        const index = asignaturasDB.findIndex(a => 
-            a.codigo === codigo && 
-            a.grupo === grupo && 
-            a.semestre === parseInt(semestre)
-        );
-        
-        if (index !== -1) {
-            asignaturasDB[index].nombre = nuevoNombre;
-            asignaturasDB[index].creditos = parseInt(nuevosCreditos);
-            res.send("Asignatura modificada exitosamente");
-        } else {
-            res.status(404).json({ error: "Asignatura no encontrada" });
+            let myJSON = JSON.stringify(arreglo);
+
+            res.status(200).send (myJSON);
+        }catch (err){
+            res.status(500).send(err.message);
         }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
     }
-};
+    ingresar(req,res){
+        try{
+            const {Nombre, Tipo_Documento, Codigo} = req.body;
+            console.log ("Documento de identidad: " + Codigo);
+            console.log ("Nombre: "+Nombre);
+            console.log ("Tipo de Documento: "+ Tipo_Documento);
+            res.status(200).send ("Funciono ok");
+        }catch (err){
+            res.status(500).send(err.message);
+        }
+    }
+}
+module.exports = new EstudiantesController();
