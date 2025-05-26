@@ -1,184 +1,177 @@
 // Datos iniciales (simulación)
-let estudiantes = [
-    {nombre: "Daniel Esteban", tipoDocumento: "CC", numeroDocumento: "1077112696"},
-    {nombre: "Pedro González", tipoDocumento: "CC", numeroDocumento: "1037112636"}
-];
-
 let asignaturas = [
-    {codigo: "IS001", nombre: "Programación I", grupo: "401M", semestre: 3},
-    {codigo: "IS002", nombre: "Bases de Datos", grupo: "402M", semestre: 4}
+    {codigo: "IS001", nombre: "Programación I", creditos: 3, grupo: "401M", semestre: 3},
+    {codigo: "IS002", nombre: "Bases de Datos", creditos: 4, grupo: "402M", semestre: 4}
 ];
 
-let estudiantesAsignaturas = [];
-
-// 1. Registrar Estudiante
-function registrarEstudiante(event) {
+// 1. Registrar Asignatura
+function registrarAsignatura(event) {
     event.preventDefault();
     
-    const nombre = document.getElementById("nombreEst").value.trim();
-    const tipoDocumento = document.getElementById("tipoDocEst").value;
-    const numeroDocumento = document.getElementById("numDocEst").value.trim();
+    const nombre = document.getElementById("nombreAsig").value.trim();
+    const codigo = document.getElementById("codigo").value.trim();
+    const creditos = parseInt(document.getElementById("creditos").value);
+    const grupo = document.getElementById("grupo").value.trim();
+    const semestre = parseInt(document.getElementById("semestre").value);
 
     // Validaciones
-    if (nombre.length < 10 || nombre.length > 100) {
-        alert("El nombre debe tener entre 10 y 100 caracteres");
+    if (nombre.length < 5 || nombre.length > 100) {
+        alert("El nombre debe tener entre 5 y 100 caracteres");
         return;
     }
 
-    if (numeroDocumento.length < 8 || numeroDocumento.length > 11) {
-        alert("El número de documento debe tener entre 8 y 11 dígitos");
+    if (codigo.length < 3 || codigo.length > 10) {
+        alert("El código debe tener entre 3 y 10 caracteres");
+        return;
+    }
+
+    if (creditos < 1 || creditos > 99) {
+        alert("Los créditos deben ser entre 1 y 99");
+        return;
+    }
+
+    if (grupo.length < 2 || grupo.length > 6) {
+        alert("El grupo debe tener entre 2 y 6 caracteres");
+        return;
+    }
+
+    if (semestre < 1 || semestre > 99) {
+        alert("El semestre debe ser entre 1 y 99");
         return;
     }
 
     // Verificar si ya existe
-    const existe = estudiantes.some(e => 
-        e.tipoDocumento === tipoDocumento && 
-        e.numeroDocumento === numeroDocumento
+    const existe = asignaturas.some(a => 
+        a.codigo === codigo && 
+        a.grupo === grupo && 
+        a.semestre === semestre
     );
 
     if (existe) {
-        alert("Este estudiante ya está registrado");
+        alert("Esta asignatura ya está registrada");
         return;
     }
 
-    // Registrar nuevo estudiante
-    estudiantes.push({ nombre, tipoDocumento, numeroDocumento });
-    alert("Estudiante registrado exitosamente");
+    // Registrar nueva asignatura
+    asignaturas.push({ nombre, codigo, creditos, grupo, semestre });
+    alert("Asignatura registrada exitosamente");
     
     // Limpiar formulario
-    document.getElementById("nombreEst").value = "";
-    document.getElementById("numDocEst").value = "";
+    document.getElementById("nombreAsig").value = "";
+    document.getElementById("codigo").value = "";
+    document.getElementById("creditos").value = "";
+    document.getElementById("grupo").value = "";
+    document.getElementById("semestre").value = "";
 }
 
-// 2. Consultar Estudiante
-function consultarEstudiante(event) {
-    event.preventDefault();
-    
-    const tipoDocumento = document.getElementById("tipoDocConsulta").value;
-    const numeroDocumento = document.getElementById("numDocConsulta").value.trim();
-
-    const estudiante = estudiantes.find(e => 
-        e.tipoDocumento === tipoDocumento && 
-        e.numeroDocumento === numeroDocumento
-    );
-
-    document.getElementById("NomEst").value = estudiante ? estudiante.nombre : "No encontrado";
-}
-
-// 3. Buscar Estudiante para Modificar
-function buscarEstudiante(event) {
-    event.preventDefault();
-    
-    const tipoDocumento = document.getElementById("tipoDocMod").value;
-    const numeroDocumento = document.getElementById("numDocMod").value.trim();
-
-    const estudiante = estudiantes.find(e => 
-        e.tipoDocumento === tipoDocumento && 
-        e.numeroDocumento === numeroDocumento
-    );
-
-    if (estudiante) {
-        document.getElementById("NuevoNombre").value = estudiante.nombre;
-        document.getElementById("nuevoTipoDoc").value = estudiante.tipoDocumento;
-    } else {
-        alert("Estudiante no encontrado");
-    }
-}
-
-// 4. Modificar Estudiante
-function modificarEstudiante(event) {
-    event.preventDefault();
-    
-    const tipoDocumento = document.getElementById("tipoDocMod").value;
-    const numeroDocumento = document.getElementById("numDocMod").value.trim();
-    const nuevoNombre = document.getElementById("NuevoNombre").value.trim();
-    const nuevoTipoDoc = document.getElementById("nuevoTipoDoc").value;
-
-    // Validaciones
-    if (nuevoNombre.length < 10 || nuevoNombre.length > 100) {
-        alert("El nombre debe tener entre 10 y 100 caracteres");
-        return;
-    }
-
-    const index = estudiantes.findIndex(e => 
-        e.tipoDocumento === tipoDocumento && 
-        e.numeroDocumento === numeroDocumento
-    );
-
-    if (index !== -1) {
-        estudiantes[index].nombre = nuevoNombre;
-        estudiantes[index].tipoDocumento = nuevoTipoDoc;
-        alert("Estudiante modificado exitosamente");
-    } else {
-        alert("Estudiante no encontrado");
-    }
-}
-
-// 5. Consultar Asignatura
+// 2. Consultar Asignatura
 function consultarAsignatura(event) {
     event.preventDefault();
     
-    const codigo = document.getElementById("CodigoAsign").value;
-    const grupo = document.getElementById("GrupoAsign").value;
-    const semestre = document.getElementById("SemestreAsign").value;
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
 
     const asignatura = asignaturas.find(a => 
         a.codigo === codigo && 
-        a.grupo === grupo && 
-        a.semestre === parseInt(semestre)
+        a.semestre === semestre && 
+        a.grupo === grupo
     );
 
-    document.getElementById("NombreAsign").value = asignatura ? asignatura.nombre : "No encontrada";
+    document.getElementById("NomAsig").value = asignatura ? asignatura.nombre : "No encontrada";
+    document.getElementById("CreAsig").value = asignatura ? asignatura.creditos : "";
 }
 
-// 6. Agregar Estudiante a Asignatura
-function agregarEstudianteAsignatura(event) {
+// 3. Buscar Asignatura para Modificar
+function buscarAsignatura(event) {
     event.preventDefault();
     
-    const codigoEstudiante = document.getElementById("CodEst").value;
-    const tipoDocumento = document.getElementById("TipoDoc").value;
-    const codigoAsignatura = document.getElementById("CodigoAsign").value;
-    const grupoAsignatura = document.getElementById("GrupoAsign").value;
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
 
-    // Verificar que existan ambos
-    const estudiante = estudiantes.find(e => 
-        e.numeroDocumento === codigoEstudiante && 
-        e.tipoDocumento === tipoDocumento
-    );
-    
     const asignatura = asignaturas.find(a => 
-        a.codigo === codigoAsignatura && 
-        a.grupo === grupoAsignatura
+        a.codigo === codigo && 
+        a.semestre === semestre && 
+        a.grupo === grupo
     );
 
-    if (!estudiante || !asignatura) {
-        alert("Estudiante o asignatura no encontrados");
-        return;
+    if (asignatura) {
+        document.getElementById("nuevoNombre").value = asignatura.nombre;
+        document.getElementById("nuevosCreditos").value = asignatura.creditos;
+    } else {
+        alert("Asignatura no encontrada");
     }
-
-    // Verificar si ya está registrado
-    const yaRegistrado = estudiantesAsignaturas.some(ea => 
-        ea.codigoEstudiante === codigoEstudiante && 
-        ea.tipoDocumento === tipoDocumento &&
-        ea.codigoAsignatura === codigoAsignatura &&
-        ea.grupo === grupoAsignatura
-    );
-
-    if (yaRegistrado) {
-        alert("El estudiante ya está registrado en esta asignatura");
-        return;
-    }
-
-    // Registrar relación
-    estudiantesAsignaturas.push({
-        codigoEstudiante,
-        tipoDocumento,
-        codigoAsignatura,
-        grupo: grupoAsignatura
-    });
-    
-    alert("Estudiante agregado a la asignatura exitosamente");
-    
-    // Limpiar campos
-    document.getElementById("CodEst").value = "";
 }
+
+// 4. Modificar Asignatura
+function modificarAsignatura(event) {
+    event.preventDefault();
+    
+    const codigo = document.getElementById("tipoCodConsulta").value.trim();
+    const semestre = parseInt(document.getElementById("SemestreConsulta").value);
+    const grupo = document.getElementById("secConsulta").value.trim();
+    const nuevoNombre = document.getElementById("nuevoNombre").value.trim();
+    const nuevosCreditos = parseInt(document.getElementById("nuevosCreditos").value);
+
+    // Validaciones
+    if (nuevoNombre.length < 5 || nuevoNombre.length > 100) {
+        alert("El nombre debe tener entre 5 y 100 caracteres");
+        return;
+    }
+
+    if (nuevosCreditos < 1 || nuevosCreditos > 99) {
+        alert("Los créditos deben ser entre 1 y 99");
+        return;
+    }
+
+    const index = asignaturas.findIndex(a => 
+        a.codigo === codigo && 
+        a.semestre === semestre && 
+        a.grupo === grupo
+    );
+
+    if (index !== -1) {
+        asignaturas[index].nombre = nuevoNombre;
+        asignaturas[index].creditos = nuevosCreditos;
+        alert("Asignatura modificada exitosamente");
+    } else {
+        alert("Asignatura no encontrada");
+    }
+}
+
+/* 
+// Versión con conexión al backend (manteniendo comentada como referencia)
+function registrarAsignatura(event) {
+    event.preventDefault();
+    
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    let raw = JSON.stringify({
+      "nombre": document.getElementById("nombreAsig").value,
+      "codigo": document.getElementById("codigo").value,
+      "creditos": document.getElementById("creditos").value, 
+      "grupo": document.getElementById("grupo").value,
+      "semestre": document.getElementById("semestre").value
+    });
+  
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+  
+    fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/asignatura", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        alert("Asignatura registrada exitosamente");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al registrar asignatura");
+      });
+}
+*/

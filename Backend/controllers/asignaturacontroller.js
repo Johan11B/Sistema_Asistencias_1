@@ -1,108 +1,82 @@
-// controllers/asignaturacontroller.js
+// Base de datos simulada
+let asignaturasDB = [
+    {codigo: "IS001", nombre: "Programación I", creditos: 3, grupo: "401M", semestre: 3},
+    {codigo: "IS002", nombre: "Bases de Datos", creditos: 4, grupo: "402M", semestre: 4}
+];
 
-/**
- * Controlador para manejar operaciones relacionadas con asignaturas
- * Versión corregida manteniendo solo lo comentado
- */
-
-// 1. Consultar Asignatura
 exports.consultar = async (req, res) => {
     try {
         const { codigo, grupo, semestre } = req.query;
         
-        // Lógica real para consultar (ejemplo con base de datos)
-        const asignatura = await Asignatura.findOne({
-            where: {
-                codigo,
-                grupo,
-                semestre
-            }
-        });
+        const asignatura = asignaturasDB.find(a => 
+            a.codigo === codigo && 
+            a.grupo === grupo && 
+            a.semestre === parseInt(semestre)
+        );
         
-        if (!asignatura) {
-            return res.status(404).json({ error: "Asignatura no encontrada" });
+        if (asignatura) {
+            res.json(asignatura);
+        } else {
+            res.status(404).json({ error: "Asignatura no encontrada" });
         }
-        
-        res.json(asignatura);
-        
     } catch (error) {
-        console.error("Error al consultar asignatura:", error);
-        res.status(500).json({ 
-            error: error.message,
-            mensaje: "Error interno al consultar la asignatura"
-        });
+        res.status(500).json({ error: error.message });
     }
 };
 
-// 2. Registrar Asignatura
 exports.ingresar = async (req, res) => {
     try {
         const { nombre, codigo, creditos, grupo, semestre } = req.body;
         
-        // Validación básica
+        // Validaciones
         if (!nombre || !codigo || !creditos || !grupo || !semestre) {
             return res.status(400).json({ error: "Todos los campos son requeridos" });
         }
         
-        // Lógica real para registrar (ejemplo con base de datos)
-        const [asignatura, created] = await Asignatura.findOrCreate({
-            where: { codigo, grupo, semestre },
-            defaults: { nombre, creditos }
-        });
+        // Verificar si ya existe
+        const existe = asignaturasDB.some(a => 
+            a.codigo === codigo && 
+            a.grupo === grupo && 
+            a.semestre === parseInt(semestre)
+        );
         
-        if (!created) {
-            return res.status(409).json({ error: "La asignatura ya existe" });
+        if (existe) {
+            return res.status(400).json({ error: "La asignatura ya está registrada" });
         }
         
-        res.status(201).json({
-            mensaje: "Asignatura registrada exitosamente",
-            data: asignatura
+        // Registrar nueva asignatura
+        asignaturasDB.push({ 
+            nombre, 
+            codigo, 
+            creditos: parseInt(creditos), 
+            grupo, 
+            semestre: parseInt(semestre)
         });
         
+        res.status(201).send("Asignatura registrada exitosamente");
     } catch (error) {
-        console.error("Error al registrar asignatura:", error);
-        res.status(400).json({ 
-            error: error.message,
-            mensaje: "Error al procesar el registro"
-        });
+        res.status(500).json({ error: error.message });
     }
 };
 
-// 3. Modificar Asignatura
 exports.modificar = async (req, res) => {
     try {
         const { codigo, grupo, semestre, nuevoNombre, nuevosCreditos } = req.body;
         
-        // Validación básica
-        if (!codigo || !grupo || !semestre) {
-            return res.status(400).json({ error: "Los campos de identificación son requeridos" });
-        }
-        
-        // Lógica real para modificar (ejemplo con base de datos)
-        const result = await Asignatura.update(
-            { 
-                nombre: nuevoNombre, 
-                creditos: nuevosCreditos 
-            },
-            { 
-                where: { codigo, grupo, semestre } 
-            }
+        const index = asignaturasDB.findIndex(a => 
+            a.codigo === codigo && 
+            a.grupo === grupo && 
+            a.semestre === parseInt(semestre)
         );
         
-        if (result[0] === 0) {
-            return res.status(404).json({ error: "Asignatura no encontrada" });
+        if (index !== -1) {
+            asignaturasDB[index].nombre = nuevoNombre;
+            asignaturasDB[index].creditos = parseInt(nuevosCreditos);
+            res.send("Asignatura modificada exitosamente");
+        } else {
+            res.status(404).json({ error: "Asignatura no encontrada" });
         }
-        
-        res.json({
-            mensaje: "Asignatura modificada exitosamente",
-            actualizados: result[0]
-        });
-        
     } catch (error) {
-        console.error("Error al modificar asignatura:", error);
-        res.status(400).json({ 
-            error: error.message,
-            mensaje: "Error al procesar la modificación"
-        });
+        res.status(500).json({ error: error.message });
     }
 };
