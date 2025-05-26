@@ -1,159 +1,184 @@
-// URL base de la API
-const API_URL = "https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes";
+// Datos iniciales (simulación)
+let estudiantes = [
+    {nombre: "Daniel Esteban", tipoDocumento: "CC", numeroDocumento: "1077112696"},
+    {nombre: "Pedro González", tipoDocumento: "CC", numeroDocumento: "1037112636"}
+];
 
-// Registrar Estudiante
+let asignaturas = [
+    {codigo: "IS001", nombre: "Programación I", grupo: "401M", semestre: 3},
+    {codigo: "IS002", nombre: "Bases de Datos", grupo: "402M", semestre: 4}
+];
+
+let estudiantesAsignaturas = [];
+
+// 1. Registrar Estudiante
 function registrarEstudiante(event) {
     event.preventDefault();
     
-    const data = {
-        nombre: document.getElementById("nombreEst").value,
-        tipoDocumento: document.getElementById("tipoDocEst").value,
-        numeroDocumento: document.getElementById("numDocEst").value
-    };
+    const nombre = document.getElementById("nombreEst").value.trim();
+    const tipoDocumento = document.getElementById("tipoDocEst").value;
+    const numeroDocumento = document.getElementById("numDocEst").value.trim();
+
+    // Validaciones
+    if (nombre.length < 10 || nombre.length > 100) {
+        alert("El nombre debe tener entre 10 y 100 caracteres");
+        return;
+    }
+
+    if (numeroDocumento.length < 8 || numeroDocumento.length > 11) {
+        alert("El número de documento debe tener entre 8 y 11 dígitos");
+        return;
+    }
+
+    // Verificar si ya existe
+    const existe = estudiantes.some(e => 
+        e.tipoDocumento === tipoDocumento && 
+        e.numeroDocumento === numeroDocumento
+    );
+
+    if (existe) {
+        alert("Este estudiante ya está registrado");
+        return;
+    }
+
+    // Registrar nuevo estudiante
+    estudiantes.push({ nombre, tipoDocumento, numeroDocumento });
+    alert("Estudiante registrado exitosamente");
     
-    fetch(`${API_URL}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
-    })
-    .then(result => {
-        alert(result.mensaje);
-        document.getElementById("nombreEst").value = "";
-        document.getElementById("numDocEst").value = "";
-    })
-    .catch(error => {
-        console.error(error);
-        alert(error.message);
-    });
+    // Limpiar formulario
+    document.getElementById("nombreEst").value = "";
+    document.getElementById("numDocEst").value = "";
 }
 
-// Consultar Estudiante
+// 2. Consultar Estudiante
 function consultarEstudiante(event) {
     event.preventDefault();
     
-    const tipoDoc = document.getElementById("tipoDocConsulta").value;
-    const numDoc = document.getElementById("numDocConsulta").value;
-    
-    fetch(`${API_URL}?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
-    .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
-    })
-    .then(estudiante => {
-        document.getElementById("NomEst").value = estudiante.nombre || "No encontrado";
-    })
-    .catch(error => {
-        console.error(error);
-        document.getElementById("NomEst").value = "Error al consultar";
-        alert(error.message);
-    });
+    const tipoDocumento = document.getElementById("tipoDocConsulta").value;
+    const numeroDocumento = document.getElementById("numDocConsulta").value.trim();
+
+    const estudiante = estudiantes.find(e => 
+        e.tipoDocumento === tipoDocumento && 
+        e.numeroDocumento === numeroDocumento
+    );
+
+    document.getElementById("NomEst").value = estudiante ? estudiante.nombre : "No encontrado";
 }
 
-// Buscar Estudiante para Modificar
+// 3. Buscar Estudiante para Modificar
 function buscarEstudiante(event) {
     event.preventDefault();
     
-    const tipoDoc = document.getElementById("tipoDocMod").value;
-    const numDoc = document.getElementById("numDocMod").value;
-    
-    fetch(`${API_URL}?tipoDoc=${tipoDoc}&numDoc=${numDoc}`)
-    .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
-    })
-    .then(estudiante => {
-        document.getElementById("NuevoNombre").value = estudiante.nombre || "";
-        document.getElementById("nuevoTipoDoc").value = estudiante.tipoDocumento || "CC";
-    })
-    .catch(error => {
-        console.error(error);
-        alert(error.message);
-    });
+    const tipoDocumento = document.getElementById("tipoDocMod").value;
+    const numeroDocumento = document.getElementById("numDocMod").value.trim();
+
+    const estudiante = estudiantes.find(e => 
+        e.tipoDocumento === tipoDocumento && 
+        e.numeroDocumento === numeroDocumento
+    );
+
+    if (estudiante) {
+        document.getElementById("NuevoNombre").value = estudiante.nombre;
+        document.getElementById("nuevoTipoDoc").value = estudiante.tipoDocumento;
+    } else {
+        alert("Estudiante no encontrado");
+    }
 }
 
-// Modificar Estudiante
+// 4. Modificar Estudiante
 function modificarEstudiante(event) {
     event.preventDefault();
     
-    const data = {
-        tipoDocumento: document.getElementById("tipoDocMod").value,
-        numeroDocumento: document.getElementById("numDocMod").value,
-        nuevoNombre: document.getElementById("NuevoNombre").value,
-        nuevoTipoDoc: document.getElementById("nuevoTipoDoc").value
-    };
-    
-    fetch(`${API_URL}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
-    })
-    .then(result => {
-        alert(result.mensaje);
-        document.getElementById("NuevoNombre").value = "";
-    })
-    .catch(error => {
-        console.error(error);
-        alert(error.message);
-    });
+    const tipoDocumento = document.getElementById("tipoDocMod").value;
+    const numeroDocumento = document.getElementById("numDocMod").value.trim();
+    const nuevoNombre = document.getElementById("NuevoNombre").value.trim();
+    const nuevoTipoDoc = document.getElementById("nuevoTipoDoc").value;
+
+    // Validaciones
+    if (nuevoNombre.length < 10 || nuevoNombre.length > 100) {
+        alert("El nombre debe tener entre 10 y 100 caracteres");
+        return;
+    }
+
+    const index = estudiantes.findIndex(e => 
+        e.tipoDocumento === tipoDocumento && 
+        e.numeroDocumento === numeroDocumento
+    );
+
+    if (index !== -1) {
+        estudiantes[index].nombre = nuevoNombre;
+        estudiantes[index].tipoDocumento = nuevoTipoDoc;
+        alert("Estudiante modificado exitosamente");
+    } else {
+        alert("Estudiante no encontrado");
+    }
 }
 
-// Consultar Asignatura
+// 5. Consultar Asignatura
 function consultarAsignatura(event) {
     event.preventDefault();
     
     const codigo = document.getElementById("CodigoAsign").value;
     const grupo = document.getElementById("GrupoAsign").value;
     const semestre = document.getElementById("SemestreAsign").value;
-    
-    fetch(`${API_URL}/asignatura?codigo=${codigo}&grupo=${grupo}&semestre=${semestre}`)
-    .then(response => {
-        if (!response.ok) throw new Error("Error al consultar asignatura");
-        return response.json();
-    })
-    .then(asignatura => {
-        document.getElementById("NombreAsign").value = asignatura.nombre || "No encontrada";
-    })
-    .catch(error => {
-        console.error(error);
-        document.getElementById("NombreAsign").value = "Error al consultar";
-        alert(error.message);
-    });
+
+    const asignatura = asignaturas.find(a => 
+        a.codigo === codigo && 
+        a.grupo === grupo && 
+        a.semestre === parseInt(semestre)
+    );
+
+    document.getElementById("NombreAsign").value = asignatura ? asignatura.nombre : "No encontrada";
 }
 
-// Agregar Estudiante a Asignatura
+// 6. Agregar Estudiante a Asignatura
 function agregarEstudianteAsignatura(event) {
     event.preventDefault();
     
-    const data = {
-        codigoEstudiante: document.getElementById("CodEst").value,
-        tipoDocumento: document.getElementById("TipoDoc").value,
-        codigoAsignatura: document.getElementById("CodigoAsign").value,
-        grupo: document.getElementById("GrupoAsign").value
-    };
+    const codigoEstudiante = document.getElementById("CodEst").value;
+    const tipoDocumento = document.getElementById("TipoDoc").value;
+    const codigoAsignatura = document.getElementById("CodigoAsign").value;
+    const grupoAsignatura = document.getElementById("GrupoAsign").value;
+
+    // Verificar que existan ambos
+    const estudiante = estudiantes.find(e => 
+        e.numeroDocumento === codigoEstudiante && 
+        e.tipoDocumento === tipoDocumento
+    );
     
-    fetch(`${API_URL}/asignatura`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Error en el servidor");
-        return response.json();
-    })
-    .then(result => {
-        alert(result.mensaje);
-        // Limpiar campos si es necesario
-    })
-    .catch(error => {
-        console.error(error);
-        alert(error.message);
+    const asignatura = asignaturas.find(a => 
+        a.codigo === codigoAsignatura && 
+        a.grupo === grupoAsignatura
+    );
+
+    if (!estudiante || !asignatura) {
+        alert("Estudiante o asignatura no encontrados");
+        return;
+    }
+
+    // Verificar si ya está registrado
+    const yaRegistrado = estudiantesAsignaturas.some(ea => 
+        ea.codigoEstudiante === codigoEstudiante && 
+        ea.tipoDocumento === tipoDocumento &&
+        ea.codigoAsignatura === codigoAsignatura &&
+        ea.grupo === grupoAsignatura
+    );
+
+    if (yaRegistrado) {
+        alert("El estudiante ya está registrado en esta asignatura");
+        return;
+    }
+
+    // Registrar relación
+    estudiantesAsignaturas.push({
+        codigoEstudiante,
+        tipoDocumento,
+        codigoAsignatura,
+        grupo: grupoAsignatura
     });
+    
+    alert("Estudiante agregado a la asignatura exitosamente");
+    
+    // Limpiar campos
+    document.getElementById("CodEst").value = "";
 }
