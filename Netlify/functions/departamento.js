@@ -4,13 +4,11 @@ const serverless = require('serverless-http');
 
 const app = express();
 
-// ✅ Middleware necesarios
 app.use(cors());
 app.use(express.json());
 
-// ✅ Rutas del departamento conectadas directamente
+// ✅ Carga directa de las rutas
 const departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
-app.use("/departamento", departamentoroutes); // Esto habilita la ruta /.netlify/functions/departamento
+app.use("/", departamentoroutes); // SIN prefijo /departamento
 
-// ✅ Export correcto para Netlify
 module.exports.handler = serverless(app);
