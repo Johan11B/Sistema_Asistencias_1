@@ -1,35 +1,34 @@
-class EstudiantesController {
-    constructor() {
-        // Base de datos simulada
-        this.estudiantes = [
-            {nombre: "Daniel Esteban", tipoDocumento: "CC", numeroDocumento: "1077112696"},
-            {nombre: "Pedro González", tipoDocumento: "CC", numeroDocumento: "1037112636"}
-        ];
-        
-        this.asignaturas = [
-            {codigo: "IS001", nombre: "Programación I", grupo: "401M", semestre: 3},
-            {codigo: "IS002", nombre: "Bases de Datos", grupo: "402M", semestre: 4}
-        ];
-        
-        this.estudiantesAsignaturas = [];
-    }
+const admin = require('./firebaseAdmin');
+const db = admin.firestore();
+const estudiantesRef = db.collection('estudiantes');
+const asignaturasRef = db.collection('asignaturas');
+const estudiantesAsignaturasRef = db.collection('estudiantes_asignaturas');
 
-    // Operaciones con Estudiantes
-    consultarEstudiante(req, res) {
+class EstudiantesController {
+    // Consultar estudiante por tipo y número de documento
+    async consultarEstudiante(req, res) {
         try {
             const { tipoDocumento, numeroDocumento } = req.query;
-            const estudiante = this.estudiantes.find(e => 
-                e.tipoDocumento === tipoDocumento && 
-                e.numeroDocumento === numeroDocumento
-            );
             
-            res.json(estudiante || { error: "Estudiante no encontrado" });
+            const snapshot = await estudiantesRef
+                .where('tipoDocumento', '==', tipoDocumento)
+                .where('numeroDocumento', '==', numeroDocumento)
+                .limit(1)
+                .get();
+            
+            if (snapshot.empty) {
+                return res.status(404).json({ error: "Estudiante no encontrado" });
+            }
+            
+            const estudiante = snapshot.docs[0].data();
+            res.json(estudiante);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 
-    registrarEstudiante(req, res) {
+    // Registrar nuevo estudiante
+    async registrarEstudiante(req, res) {
         try {
             const { nombre, tipoDocumento, numeroDocumento } = req.body;
             
@@ -39,85 +38,106 @@ class EstudiantesController {
             }
             
             // Verificar si ya existe
-            const existe = this.estudiantes.some(e => 
-                e.tipoDocumento === tipoDocumento && 
-                e.numeroDocumento === numeroDocumento
-            );
+            const existe = await estudiantesRef
+                .where('tipoDocumento', '==', tipoDocumento)
+                .where('numeroDocumento', '==', numeroDocumento)
+                .limit(1)
+                .get();
             
-            if (existe) {
+            if (!existe.empty) {
                 return res.status(400).json({ error: "El estudiante ya está registrado" });
             }
             
             // Registrar
-            this.estudiantes.push({ nombre, tipoDocumento, numeroDocumento });
+            await estudiantesRef.add({
+                nombre,
+                tipoDocumento,
+                numeroDocumento,
+                fechaRegistro: admin.firestore.FieldValue.serverTimestamp()
+            });
+            
             res.status(201).send("Estudiante registrado exitosamente");
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 
-    modificarEstudiante(req, res) {
+    // Modificar estudiante
+    async modificarEstudiante(req, res) {
         try {
             const { tipoDocumento, numeroDocumento, nuevoNombre, nuevoTipoDoc } = req.body;
             
-            const index = this.estudiantes.findIndex(e => 
-                e.tipoDocumento === tipoDocumento && 
-                e.numeroDocumento === numeroDocumento
-            );
+            // Buscar estudiante
+            const snapshot = await estudiantesRef
+                .where('tipoDocumento', '==', tipoDocumento)
+                .where('numeroDocumento', '==', numeroDocumento)
+                .limit(1)
+                .get();
             
-            if (index !== -1) {
-                this.estudiantes[index].nombre = nuevoNombre;
-                this.estudiantes[index].tipoDocumento = nuevoTipoDoc;
-                res.send("Estudiante modificado exitosamente");
-            } else {
-                res.status(404).json({ error: "Estudiante no encontrado" });
+            if (snapshot.empty) {
+                return res.status(404).json({ error: "Estudiante no encontrado" });
             }
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    // Operaciones con Asignaturas
-    consultarAsignatura(req, res) {
-        try {
-            const { codigo, grupo, semestre } = req.query;
-            const asignatura = this.asignaturas.find(a => 
-                a.codigo === codigo && 
-                a.grupo === grupo && 
-                a.semestre === parseInt(semestre)
-            );
             
-            res.json(asignatura || { error: "Asignatura no encontrada" });
+            // Actualizar
+            const estudianteId = snapshot.docs[0].id;
+            await estudiantesRef.doc(estudianteId).update({
+                nombre: nuevoNombre,
+                tipoDocumento: nuevoTipoDoc
+            });
+            
+            res.send("Estudiante modificado exitosamente");
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 
-    agregarEstudianteAsignatura(req, res) {
+    // Consultar asignatura
+    async consultarAsignatura(req, res) {
+        try {
+            const { codigo, grupo } = req.query;
+            const asignaturaId = `${codigo}_${grupo}`;
+            
+            const doc = await asignaturasRef.doc(asignaturaId).get();
+            
+            if (!doc.exists) {
+                return res.status(404).json({ error: "Asignatura no encontrada" });
+            }
+            
+            res.json(doc.data());
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    // Agregar estudiante a asignatura
+    async agregarEstudianteAsignatura(req, res) {
         try {
             const { codigoEstudiante, tipoDocumento, codigoAsignatura, grupo } = req.body;
             
-            // Verificar que existan ambos
-            const estudiante = this.estudiantes.find(e => 
-                e.numeroDocumento === codigoEstudiante && 
-                e.tipoDocumento === tipoDocumento
-            );
+            // Verificar estudiante
+            const estudianteSnapshot = await estudiantesRef
+                .where('numeroDocumento', '==', codigoEstudiante)
+                .where('tipoDocumento', '==', tipoDocumento)
+                .limit(1)
+                .get();
             
-            const asignatura = this.asignaturas.find(a => 
-                a.codigo === codigoAsignatura && 
-                a.grupo === grupo
-            );
+            if (estudianteSnapshot.empty) {
+                return res.status(404).json({ error: "Estudiante no encontrado" });
+            }
             
-            if (!estudiante || !asignatura) {
-                return res.status(404).json({ error: "Estudiante o asignatura no encontrados" });
+            // Verificar asignatura
+            const asignaturaId = `${codigoAsignatura}_${grupo}`;
+            const asignaturaDoc = await asignaturasRef.doc(asignaturaId).get();
+            
+            if (!asignaturaDoc.exists) {
+                return res.status(404).json({ error: "Asignatura no encontrada" });
             }
             
             // Registrar relación
-            this.estudiantesAsignaturas.push({
-                codigoEstudiante,
-                tipoDocumento,
-                codigoAsignatura,
-                grupo
+            await estudiantesAsignaturasRef.add({
+                estudianteId: estudianteSnapshot.docs[0].id,
+                asignaturaId: asignaturaId,
+                fechaRegistro: admin.firestore.FieldValue.serverTimestamp()
             });
             
             res.status(201).send("Estudiante agregado a la asignatura exitosamente");
