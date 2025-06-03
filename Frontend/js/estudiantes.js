@@ -5,6 +5,17 @@ async function registrarEstudiante(event) {
     const tipoDocumento = document.getElementById("tipoDocEst").value;
     const numeroDocumento = document.getElementById("numDocEst").value.trim();
 
+    // Validación básica del frontend
+    if (nombre.length < 10 || nombre.length > 100) {
+        alert("El nombre debe tener entre 10 y 100 caracteres");
+        return;
+    }
+
+    if (!/^\d{8,11}$/.test(numeroDocumento)) {
+        alert("Número de documento inválido. Debe tener entre 8 y 11 dígitos");
+        return;
+    }
+
     try {
         const response = await fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
             method: "POST",
@@ -14,11 +25,13 @@ async function registrarEstudiante(event) {
             body: JSON.stringify({ nombre, tipoDocumento, numeroDocumento })
         });
 
+        const result = await response.json();
+
         if (!response.ok) {
-            throw new Error(await response.text());
+            throw new Error(result.error || "Error al registrar estudiante");
         }
 
-        alert("Estudiante registrado exitosamente");
+        alert(result.message || "Estudiante registrado exitosamente");
         document.getElementById("nombreEst").value = "";
         document.getElementById("numDocEst").value = "";
     } catch (error) {
@@ -36,12 +49,13 @@ async function consultarEstudiante(event) {
     try {
         const response = await fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes?tipoDocumento=${tipoDocumento}&numeroDocumento=${numeroDocumento}`);
         
+        const result = await response.json();
+
         if (!response.ok) {
-            throw new Error("Estudiante no encontrado");
+            throw new Error(result.error || "Estudiante no encontrado");
         }
 
-        const estudiante = await response.json();
-        document.getElementById("NomEst").value = estudiante.nombre;
+        document.getElementById("NomEst").value = result.nombre;
     } catch (error) {
         console.error("Error:", error);
         document.getElementById("NomEst").value = error.message;
@@ -56,6 +70,12 @@ async function modificarEstudiante(event) {
     const nuevoNombre = document.getElementById("NuevoNombre").value.trim();
     const nuevoTipoDoc = document.getElementById("nuevoTipoDoc").value;
 
+    // Validación del frontend
+    if (nuevoNombre && (nuevoNombre.length < 10 || nuevoNombre.length > 100)) {
+        alert("El nuevo nombre debe tener entre 10 y 100 caracteres");
+        return;
+    }
+
     try {
         const response = await fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes", {
             method: "PUT",
@@ -65,11 +85,13 @@ async function modificarEstudiante(event) {
             body: JSON.stringify({ tipoDocumento, numeroDocumento, nuevoNombre, nuevoTipoDoc })
         });
 
+        const result = await response.json();
+
         if (!response.ok) {
-            throw new Error(await response.text());
+            throw new Error(result.error || "Error al modificar estudiante");
         }
 
-        alert("Estudiante modificado exitosamente");
+        alert(result.message || "Estudiante modificado exitosamente");
         document.getElementById("NuevoNombre").value = "";
     } catch (error) {
         console.error("Error:", error);
@@ -86,12 +108,13 @@ async function consultarAsignatura(event) {
     try {
         const response = await fetch(`https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes/asignatura?codigo=${codigo}&grupo=${grupo}`);
         
+        const result = await response.json();
+
         if (!response.ok) {
-            throw new Error("Asignatura no encontrada");
+            throw new Error(result.error || "Asignatura no encontrada");
         }
 
-        const asignatura = await response.json();
-        document.getElementById("NombreAsign").value = asignatura.nombre;
+        document.getElementById("NombreAsign").value = result.nombre;
     } catch (error) {
         console.error("Error:", error);
         document.getElementById("NombreAsign").value = error.message;
@@ -115,11 +138,13 @@ async function agregarEstudianteAsignatura(event) {
             body: JSON.stringify({ codigoEstudiante, tipoDocumento, codigoAsignatura, grupo })
         });
 
+        const result = await response.json();
+
         if (!response.ok) {
-            throw new Error(await response.text());
+            throw new Error(result.error || "Error al agregar estudiante a la asignatura");
         }
 
-        alert("Estudiante agregado a la asignatura exitosamente");
+        alert(result.message || "Estudiante agregado a la asignatura exitosamente");
     } catch (error) {
         console.error("Error:", error);
         alert(`Error al agregar: ${error.message}`);
