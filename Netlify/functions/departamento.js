@@ -1,13 +1,16 @@
-var express = require('express');
-var cors = require("cors");
-var serverless = require ('serverless-http');
-var port = process.env.PORT || 5000;
-var app = express();
-var departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
-app.use(express.json());
-app.use(cors());
+const express = require('express');
+const cors = require("cors");
+const serverless = require('serverless-http');
 
-var router = express.Router();
-router.use ("/departamento",departamentoroutes);
-var handler = app.use ('/.netlify/functions',router);
-exports.handler = serverless (app);
+const app = express();
+
+// ✅ Middleware necesarios
+app.use(cors());
+app.use(express.json());
+
+// ✅ Rutas del departamento conectadas directamente
+const departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
+app.use("/departamento", departamentoroutes); // Esto habilita la ruta /.netlify/functions/departamento
+
+// ✅ Export correcto para Netlify
+module.exports.handler = serverless(app);
