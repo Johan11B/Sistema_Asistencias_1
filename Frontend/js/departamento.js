@@ -1,53 +1,51 @@
-// Consultar nombre del departamento
+// Mostrar Departamento
 function mostrar(event) {
-  event.preventDefault();
+  if (event) event.preventDefault();
 
-  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento")
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes")
     .then((response) => response.json())
     .then((result) => {
-      console.log("Consulta recibida:", result);
       document.getElementById("NomDep").value = result.nombre || "No encontrado";
     })
     .catch((error) => {
-      console.error("Error al consultar:", error);
+      console.error(error);
       document.getElementById("NomDep").value = "Error al consultar";
     });
 }
 
-// Modificar nombre del departamento
+// Modificar Departamento
 function Modify(event) {
   event.preventDefault();
+
   const nuevoNombre = document.getElementById("NewDep").value.trim();
 
-  // Validación
   if (nuevoNombre.length < 4 || nuevoNombre.length > 50) {
     alert("El nuevo nombre debe tener entre 4 y 50 caracteres");
     return;
   }
 
-  console.log("Enviando nuevo nombre:", nuevoNombre);
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
 
-  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nuevoNombre: nuevoNombre })
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al modificar. Código: " + response.status);
-      }
-      return response.text();
-    })
+  const raw = JSON.stringify({ Nombre : nuevoNombre });
+
+  const requestOptions = {
+    method: "POST", 
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+  console.log("Enviando:", raw);
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento", requestOptions)
+    .then((response) => response.text())
     .then((result) => {
-      console.log("Modificación exitosa:", result);
+      console.log(result);
       alert("Departamento modificado exitosamente");
       document.getElementById("NewDep").value = "";
-      mostrar(event); // Actualiza el campo de arriba
+      document.getElementById("NomDep").value = "";
     })
     .catch((error) => {
-      console.error("Error al modificar:", error);
+      console.error(error);
       alert("Error al modificar departamento");
     });
 }
