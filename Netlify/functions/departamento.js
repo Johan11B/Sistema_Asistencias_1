@@ -1,14 +1,13 @@
-const express = require('express');
-const cors = require("cors");
-const serverless = require('serverless-http');
-
-const app = express();
-
-app.use(cors());
+var express = require('express');
+var cors = require("cors");
+var serverless = require ('serverless-http');
+var port = process.env.PORT || 5000;
+var app = express();
+var departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
 app.use(express.json());
+app.use(cors());
 
-// ✅ Carga directa de las rutas
-const departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
-app.use("/", departamentoroutes); // SIN prefijo /departamento
-
-module.exports.handler = serverless(app);
+var router = express.Router();
+router.use ("/departamento",departamentoroutes);
+var handler = app.use ('/.netlify/functions',router);
+exports.handler = serverless (app);
