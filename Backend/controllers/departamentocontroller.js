@@ -1,5 +1,5 @@
-const db = require('../config/firebaseConfig').db;
-const admin = require('./firebaseAdmin');
+const db = require("./firebaseAdmin");
+
 
 exports.consultar = async (req, res) => {
     try {
