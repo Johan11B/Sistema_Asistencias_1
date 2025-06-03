@@ -1,4 +1,3 @@
-const express = require('express');
 var express = require('express');
 var cors = require("cors");
 var serverless = require ('serverless-http');
