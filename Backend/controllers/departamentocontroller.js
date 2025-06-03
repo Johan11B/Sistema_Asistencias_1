@@ -1,4 +1,5 @@
 const db = require("./firebaseAdmin");
+const db = admin.firestore();
 
 exports.consultar = async (req, res) => {
     try {
