@@ -1,18 +1,29 @@
 var express = require('express');
 var cors = require("cors");
-var serverless = require('serverless-http');
-var app = express();
+var serverless = require ('serverless-http');
+var port = process.env.PORT || 5000;
 var departamentoroutes = require("../../Backend/routes/departamentoroutes.js");
-
+var app = express();
+app.use((req, res, next) => {
+  let data = '';
+  req.on('data', chunk => {
+    data += chunk;
+  });
+  req.on('end', () => {
+    try {
+      if (data) {
+        req.rawBody = data;
+        req.body = JSON.parse(data);
+      }
+    } catch (err) {
+      console.error("Error al parsear JSON:", err);
+    }
+    next();
+  });
+});
 app.use(express.json());
 app.use(cors());
 
-// Usa el router exactamente como en tu ejemplo funcional
-var router = express.Router();
-router.use("/departamento", departamentoroutes); // <- Cambiado a "departamento"
+app.use('/.netlify/functions/departamento', departamentoroutes);
 
-// Esta línea debe ser exactamente así como en tu ejemplo que funciona
-app.use('/.netlify/functions', router);
-
-// Exportación idéntica a tu ejemplo funcional
-exports.handler = serverless(app);
+module.exports.handler = serverless(app);
