@@ -2,7 +2,7 @@
 function mostrar(event) {
   if (event) event.preventDefault();
 
-  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/estudiantes")
+  fetch("https://sistemadeasistencia.netlify.app/.netlify/functions/departamento",)
     .then((response) => response.json())
     .then((result) => {
       document.getElementById("NomDep").value = result.nombre || "No encontrado";
